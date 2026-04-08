@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-orange: #f9680e;
+  --color-brand-blue: #04176b;
+  --color-brand-green: #017309;
+  
+  /* Overriding default colors to match brand exactly */
+  --color-orange-500: var(--color-brand-orange);
+  --color-orange-600: #e05a00;
+  --color-blue-500: #0a26a3; /* A bit lighter than brand blue for visibility on dark */
+  --color-blue-600: var(--color-brand-blue);
+  --color-green-500: var(--color-brand-green);
+  --color-green-600: #015c07;
+}
+
+@utility speaker-mesh {
+  background-image: radial-gradient(circle, #ffffff10 1px, transparent 1px);
+  background-size: 4px 4px;
+}
+
+@utility speaker-grid {
+  background-image: 
+    linear-gradient(to right, #ffffff08 1px, transparent 1px),
+    linear-gradient(to bottom, #ffffff08 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+@utility speaker-mesh-large {
+  background-image: radial-gradient(circle, #ffffff12 1px, transparent 1px);
+  background-size: 12px 12px;
+}
+
+@utility geometric-pattern {
+  background-image: 
+    linear-gradient(30deg, #ffffff05 12%, transparent 12.5%, transparent 87%, #ffffff05 87.5%, #ffffff05),
+    linear-gradient(150deg, #ffffff05 12%, transparent 12.5%, transparent 87%, #ffffff05 87.5%, #ffffff05),
+    linear-gradient(30deg, #ffffff05 12%, transparent 12.5%, transparent 87%, #ffffff05 87.5%, #ffffff05),
+    linear-gradient(150deg, #ffffff05 12%, transparent 12.5%, transparent 87%, #ffffff05 87.5%, #ffffff05),
+    linear-gradient(60deg, #ffffff08 25%, transparent 25.5%, transparent 75%, #ffffff08 75.5%, #ffffff08),
+    linear-gradient(60deg, #ffffff08 25%, transparent 25.5%, transparent 75%, #ffffff08 75.5%, #ffffff08);
+  background-size: 40px 70px;
+}
