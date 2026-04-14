@@ -87,12 +87,9 @@ export default function App() {
   const photoCreativity1 = "https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&q=80&w=800";
 
   const galleryImages = [
-    { url: '/assets/gallery/foto1.jpg', alt: 'Evento Ismo Sound 1', title: 'Sonido e Iluminación' },
-    { url: '/assets/gallery/foto2.jpg', alt: 'Evento Ismo Sound 2', title: 'Montaje Profesional' },
-    { url: '/assets/gallery/foto3.jpg', alt: 'Ismo Creativity 1', title: 'Personalizados' },
-    { url: '/assets/gallery/foto4.jpg', alt: 'Ismo Creativity 2', title: 'Papelería Creativa' },
-    { url: '/assets/gallery/foto5.jpg', alt: 'Evento Ismo Sound 3', title: 'Atmosfera Premium' },
-    { url: '/assets/gallery/foto6.jpg', alt: 'Ismo Creativity 3', title: 'Detalles Únicos' },
+    { url: '/assets/gallery/FOTO1.jpeg', alt: 'Evento Ismo Sound 1', title: 'Sonido e Iluminación' },
+    { url: '/assets/gallery/FOTO2.jpeg', alt: 'Evento Ismo Sound 2', title: 'Montaje Profesional' },
+    { url: '/assets/gallery/FOTO3.jpeg', alt: 'Ismo Creativity 1', title: 'Personalizados' },
   ];
 
   const containerVariants = {
