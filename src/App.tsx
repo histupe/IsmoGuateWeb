@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { useState } from 'react';
 import { 
   Music, 
   Phone, 
@@ -32,14 +33,19 @@ import {
   Calendar,
   MessageSquare,
   Star,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Menu,
+  X
 } from 'lucide-react';
 import { motion } from 'motion/react';
 
 export default function App() {
+  const [packageType, setPackageType] = useState<'sound' | 'creativity'>('sound');
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const whatsappNumber = "50245644861";
   const whatsappLink = `https://wa.me/${whatsappNumber}?text=Hola!%20Vengo%20de%20la%20página%20web%20y%20quisiera%20más%20información.`;
-  const catalogLink = `https://wa.me/${whatsappNumber}?text=Hola!%20Me%20gustaría%20solicitar%20el%20catálogo%20de%20Ismo%20Creativity.`;
+  const catalogLink = `https://wa.me/${whatsappNumber}?text=¡Hola%20Ismo%20Guate!%20¿Me%20envían%20el%20catálogo%20de%20Ismo%20Creativity?%20Vengo%20de%20la%20web`;
   const quoteLink = `https://wa.me/${whatsappNumber}?text=Hola!%20Me%20gustaría%20cotizar%20un%20evento%20con%20Ismo%20Sound.`;
 
   // Logos from user input (Text-based for now as requested)
@@ -51,23 +57,43 @@ export default function App() {
   );
 
   const LogoSound = ({ className = "text-3xl" }: { className?: string }) => (
-    <span className={`${className} font-black tracking-tighter`}>
+    <span className={`${className} font-sans font-bold tracking-tight`}>
       <span className="text-blue-300">ISMO</span>
       <span className="text-white">SOUND</span>
     </span>
   );
 
   const LogoCreativity = ({ className = "text-3xl", dark = false }: { className?: string, dark?: boolean }) => (
-    <span className={`${className} font-black tracking-tighter`}>
+    <span className={`${className} font-sans font-bold tracking-tight`}>
       <span className="text-orange-500">ISMO</span>
       <span className="text-green-500">CREATIVITY</span>
     </span>
+  );
+
+  const WhatsAppIcon = ({ className = "w-6 h-6" }: { className?: string }) => (
+    <svg 
+      viewBox="0 0 24 24" 
+      fill="currentColor" 
+      className={className}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
   );
 
   // Placeholder for user photos
   const photoSound1 = "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&q=80&w=800";
   const photoLighting = "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=800";
   const photoCreativity1 = "https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&q=80&w=800";
+
+  const galleryImages = [
+    { url: '/assets/gallery/foto1.jpg', alt: 'Evento Ismo Sound 1', title: 'Sonido e Iluminación' },
+    { url: '/assets/gallery/foto2.jpg', alt: 'Evento Ismo Sound 2', title: 'Montaje Profesional' },
+    { url: '/assets/gallery/foto3.jpg', alt: 'Ismo Creativity 1', title: 'Personalizados' },
+    { url: '/assets/gallery/foto4.jpg', alt: 'Ismo Creativity 2', title: 'Papelería Creativa' },
+    { url: '/assets/gallery/foto5.jpg', alt: 'Evento Ismo Sound 3', title: 'Atmosfera Premium' },
+    { url: '/assets/gallery/foto6.jpg', alt: 'Ismo Creativity 3', title: 'Detalles Únicos' },
+  ];
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -123,55 +149,129 @@ export default function App() {
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 bg-black/40 backdrop-blur-xl border-b border-white/5">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center">
+          <a href="#" className="flex items-center hover:opacity-80 transition-opacity">
             <LogoGuate />
-          </div>
+          </a>
+          
+          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
             <a href="#sound" className="hover:text-blue-300 transition-colors">Ismo Sound</a>
             <a href="#creativity" className="hover:text-orange-400 transition-colors">Ismo Creativity</a>
             <a href="#packages" className="hover:text-white transition-colors">Paquetes</a>
             <a href="#contact" className="hover:text-white transition-colors">Contacto</a>
+            
+            <div className="flex items-center gap-4 ml-2 border-l border-white/10 pl-6">
+              <a href="https://www.facebook.com/ismoguate" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-blue-300 transition-all hover:scale-110">
+                <Facebook className="w-4 h-4" />
+              </a>
+              <a href="https://www.instagram.com/ismo_guate" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-pink-500 transition-all hover:scale-110">
+                <Instagram className="w-4 h-4" />
+              </a>
+              <a href="https://www.tiktok.com/@ismo.guate?_r=1&_t=ZS-95LiovyHIbh" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-all hover:scale-110">
+                <Music2 className="w-4 h-4" />
+              </a>
+            </div>
           </div>
-          <a 
-            href={whatsappLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 bg-[#25D366] hover:bg-[#128C7E] transition-all hover:scale-105 px-5 py-2.5 rounded-full font-bold text-sm text-white shadow-lg shadow-green-500/20"
-          >
-            <MessageCircle className="w-4 h-4" />
-            <span className="hidden sm:inline">Escríbenos Ahora</span>
-          </a>
+
+          <div className="flex items-center gap-4">
+            <a 
+              href={whatsappLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden sm:flex items-center gap-2 bg-[#25D366] hover:bg-[#128C7E] transition-all hover:scale-105 px-5 py-2.5 rounded-full font-bold text-sm text-white shadow-lg shadow-green-500/20"
+            >
+              <WhatsAppIcon className="w-4 h-4" />
+              <span>Escríbenos Ahora</span>
+            </a>
+
+            {/* Mobile Menu Button */}
+            <button 
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden p-2 text-slate-300 hover:text-white transition-colors"
+            >
+              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
+
+        {/* Mobile Navigation Overlay */}
+        <motion.div
+          initial={false}
+          animate={isMenuOpen ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 }}
+          className="md:hidden overflow-hidden bg-black/95 backdrop-blur-2xl border-b border-white/5"
+        >
+          <div className="px-6 py-8 flex flex-col gap-6">
+            <a 
+              href="#sound" 
+              onClick={() => setIsMenuOpen(false)}
+              className="text-lg font-bold text-slate-300 hover:text-blue-300 transition-colors"
+            >
+              Ismo Sound
+            </a>
+            <a 
+              href="#creativity" 
+              onClick={() => setIsMenuOpen(false)}
+              className="text-lg font-bold text-slate-300 hover:text-orange-400 transition-colors"
+            >
+              Ismo Creativity
+            </a>
+            <a 
+              href="#packages" 
+              onClick={() => setIsMenuOpen(false)}
+              className="text-lg font-bold text-slate-300 hover:text-white transition-colors"
+            >
+              Paquetes
+            </a>
+            <a 
+              href="#contact" 
+              onClick={() => setIsMenuOpen(false)}
+              className="text-lg font-bold text-slate-300 hover:text-white transition-colors"
+            >
+              Contacto
+            </a>
+            
+            <div className="pt-6 border-t border-white/10 flex items-center gap-8">
+              <a href="https://www.facebook.com/ismoguate" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-blue-300 transition-all">
+                <Facebook className="w-6 h-6" />
+              </a>
+              <a href="https://www.instagram.com/ismo_guate" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-pink-500 transition-all">
+                <Instagram className="w-6 h-6" />
+              </a>
+              <a href="https://www.tiktok.com/@ismo.guate?_r=1&_t=ZS-95LiovyHIbh" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-all">
+                <Music2 className="w-6 h-6" />
+              </a>
+            </div>
+
+            <a 
+              href={whatsappLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex sm:hidden items-center justify-center gap-2 bg-[#25D366] hover:bg-[#128C7E] transition-all px-5 py-4 rounded-2xl font-bold text-white shadow-lg shadow-green-500/20"
+            >
+              <WhatsAppIcon className="w-5 h-5" />
+              <span>Escríbenos por WhatsApp</span>
+            </a>
+          </div>
+        </motion.div>
       </nav>
 
       {/* Hero Section */}
       <section className="relative min-h-screen pt-32 pb-20 px-6 overflow-hidden flex flex-col items-center justify-center">
         {/* BACKGROUND LAYER: Atmosfera Premium */}
-        <div className="absolute inset-0 -z-10 bg-[#020617]">
+        <div className="absolute inset-0 z-0 bg-[#020617]">
+          {/* Degradado Base: Azul Marino a Morado */}
+          <div className="absolute inset-0 bg-gradient-to-br from-[#000c24] via-[#020617] to-[#1e0030]" />
+          
           {/* Luces de Escenario (Spotlights) */}
-          <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/20 blur-[120px] rounded-full" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-600/15 blur-[120px] rounded-full" />
+          <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-blue-700/20 blur-[130px] rounded-full" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-purple-700/20 blur-[130px] rounded-full" />
           
           {/* Textura de malla y ruido sutil */}
-          <div className="absolute inset-0 opacity-[0.03] bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#020617]/80 to-[#020617]" />
+          <div className="absolute inset-0 opacity-[0.04] bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
         </div>
 
         <div className="max-w-7xl mx-auto w-full relative z-10">
           <div className="text-center mb-16">
-            {/* Badge de Autoridad */}
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-8"
-            >
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-              </span>
-              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-300">Producción Profesional en Guatemala</span>
-            </motion.div>
-
             {/* Headline Poderoso */}
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
@@ -179,20 +279,30 @@ export default function App() {
               transition={{ delay: 0.1 }}
               className="text-5xl md:text-8xl font-black tracking-tight mb-8 leading-[1.05] text-white"
             >
-              Tu evento con <span className="text-blue-300 drop-shadow-[0_0_20px_rgba(147,197,253,0.3)]">potencia.</span><br />
-              Tu marca con <span className="text-orange-500 drop-shadow-[0_0_20px_rgba(249,115,22,0.3)]">estilo.</span>
+              Sonido Profesional + <span className="text-blue-300 drop-shadow-[0_0_20px_rgba(147,197,253,0.3)]">Creatividad.</span>
             </motion.h1>
 
             {/* Subheadline Realista */}
-            <motion.p
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-lg md:text-2xl text-slate-300 mb-12 max-w-3xl mx-auto leading-relaxed font-medium"
+              className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-8 mb-12"
             >
-              Desde el montaje técnico impecable hasta el branding que todos recordarán. 
-              Solución integral para bodas, iglesias y eventos corporativos.
-            </motion.p>
+              <div className="flex items-center gap-3">
+                <div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
+                <p className="text-lg md:text-xl text-white font-sans font-bold tracking-wide">
+                  Ismo Sound <span className="text-slate-500 font-light mx-1 font-sans">|</span> <span className="text-slate-300 font-medium font-sans">Audio profesional</span>
+                </p>
+              </div>
+              <div className="hidden md:block w-px h-4 bg-white/10"></div>
+              <div className="flex items-center gap-3">
+                <div className="w-1.5 h-1.5 rounded-full bg-orange-500"></div>
+                <p className="text-lg md:text-xl text-white font-sans font-bold tracking-wide">
+                  Ismo Creativity <span className="text-slate-500 font-light mx-1 font-sans">|</span> <span className="text-slate-300 font-medium font-sans">Personalizados y papelería creativa</span>
+                </p>
+              </div>
+            </motion.div>
 
             {/* Indicadores de Confianza */}
             <motion.div 
@@ -237,9 +347,6 @@ export default function App() {
                   Ver Servicios
                 </a>
               </div>
-              <span className="text-[10px] font-bold text-green-400 uppercase tracking-[0.2em] animate-pulse">
-                ⚡ Respuesta inmediata vía WhatsApp
-              </span>
             </motion.div>
           </div>
 
@@ -276,42 +383,27 @@ export default function App() {
                   <Palette className="w-8 h-8" />
                 </div>
                 <h3 className="text-2xl font-black mb-2"><LogoCreativity /></h3>
-                <p className="text-slate-400 text-sm mb-6">Personalización + Branding + Sublimación</p>
-                <div className="flex items-center gap-2 text-orange-400 font-bold text-xs uppercase tracking-widest">
+                <p className="text-slate-400 text-sm mb-6">Personalización + Detalles + Sublimación</p>
+                <a 
+                  href={catalogLink} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-orange-400 font-bold text-xs uppercase tracking-widest cursor-pointer"
+                >
                   Ver Catálogo <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </div>
+                </a>
               </div>
             </motion.a>
           </div>
 
-          {/* SOCIAL PROOF: Clientes Felices */}
-          <motion.div 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="mt-20 pt-10 border-t border-white/5 flex flex-col items-center"
-          >
-            <div className="flex -space-x-3 mb-4">
-              {[1,2,3,4].map(i => (
-                <div key={i} className="w-10 h-10 rounded-full border-2 border-[#020617] bg-slate-800 flex items-center justify-center text-[10px] font-bold text-white">
-                  {String.fromCharCode(64 + i)}
-                </div>
-              ))}
-              <div className="w-10 h-10 rounded-full border-2 border-[#020617] bg-blue-600 flex items-center justify-center text-[10px] font-bold text-white">
-                +50
-              </div>
-            </div>
-            <p className="text-slate-500 text-xs font-bold uppercase tracking-widest">
-              Decenas de eventos realizados con éxito en todo el país
-            </p>
-          </motion.div>
         </div>
       </section>
 
       {/* ISMO SOUND SECTION */}
-      <section id="sound" className="py-32 px-6 border-t border-white/5 bg-black/40 relative overflow-hidden">
+      <section id="sound" className="py-32 px-6 border-t border-white/5 bg-black relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-[#0c0a09] to-[#290a04] -z-10" />
         <div className="absolute inset-0 speaker-mesh-large opacity-5 -z-10" />
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-blue-300/10 blur-[120px] -z-10" />
+        <div className="absolute top-0 right-0 w-1/2 h-full bg-orange-500/5 blur-[120px] -z-10" />
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center gap-4 mb-16">
             <LogoSound className="text-4xl" />
@@ -340,8 +432,8 @@ export default function App() {
                     "Entrega y montaje del equipo",
                     "Configuración y ajuste de sonido",
                     "Micrófonos para presentaciones y música",
-                    "Opciones con o sin técnico según tu necesidad",
-                    "Asesoría según el lugar y cantidad de personas"
+                    "Opciones según tu necesidad",
+                    "Asesoría personalizada"
                   ].map((item, i) => (
                     <li key={i} className="flex items-start gap-3 text-slate-300 bg-white/5 p-4 rounded-xl border border-white/5">
                       <div className="mt-1 bg-blue-300 rounded-full p-1">
@@ -353,8 +445,8 @@ export default function App() {
                 </ul>
               </div>
 
-              <a href={quoteLink} className="inline-flex items-center gap-3 bg-blue-300 hover:bg-blue-400 text-slate-900 px-10 py-5 rounded-2xl font-black text-lg transition-all shadow-xl shadow-blue-300/30 hover:-translate-y-1">
-                Cotiza tu evento ahora <MessageCircle className="w-6 h-6" />
+              <a href="#contact" className="inline-flex items-center gap-3 bg-blue-300 hover:bg-blue-400 text-slate-900 px-10 py-5 rounded-2xl font-black text-lg transition-all shadow-xl shadow-blue-300/30 hover:-translate-y-1">
+                Cotiza tu evento ahora <WhatsAppIcon className="w-6 h-6" />
               </a>
             </motion.div>
 
@@ -402,8 +494,8 @@ export default function App() {
                 </p>
                 <div className="flex flex-wrap gap-4 text-xs font-medium">
                   <span className="bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">Par LED RGBW</span>
-                  <span className="bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">Controlador DMX</span>
-                  <span className="bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">Pedestales Gravity</span>
+                  <span className="bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">Atmosfera que eleva tu evento</span>
+                  <span className="bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">Equipos de calidad</span>
                 </div>
               </div>
             </div>
@@ -429,9 +521,9 @@ export default function App() {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
                 {[
-                  { icon: <Printer className="text-orange-500" />, title: 'Sublimación', desc: 'Tazas, termos, gorras.' },
+                  { icon: <Printer className="text-orange-500" />, title: 'Sublimación', desc: 'Tazas, termos, gorras y más.' },
                   { icon: <Layers className="text-orange-500" />, title: 'DTF', desc: 'Playeras y textiles.' },
-                  { icon: <Palette className="text-orange-500" />, title: 'Papelería', desc: 'Stickers, invitaciones.' },
+                  { icon: <Palette className="text-orange-500" />, title: 'Papelería', desc: 'Stickers, invitaciones, planificadores.' },
                   { icon: <Sparkles className="text-orange-500" />, title: 'Diseño', desc: 'Arte personalizado.' }
                 ].map((item, i) => (
                   <div key={i} className="flex gap-3 p-4 rounded-2xl bg-slate-50 border border-slate-100">
@@ -457,7 +549,12 @@ export default function App() {
                 </div>
               </div>
 
-              <a href={catalogLink} className="inline-flex items-center gap-3 bg-orange-500 hover:bg-orange-600 text-white px-10 py-5 rounded-2xl font-black text-lg transition-all shadow-xl shadow-orange-500/20 hover:-translate-y-1">
+              <a 
+                href={catalogLink} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 bg-orange-500 hover:bg-orange-600 text-white px-10 py-5 rounded-2xl font-black text-lg transition-all shadow-xl shadow-orange-500/20 hover:-translate-y-1"
+              >
                 Solicita tu catálogo <ShoppingBag className="w-6 h-6" />
               </a>
             </div>
@@ -481,19 +578,19 @@ export default function App() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              { icon: <Users />, title: 'Atención personalizada', desc: 'Te asesoramos para elegir el equipo o producto ideal.' },
-              { icon: <ShieldCheck />, title: 'Equipo profesional', desc: 'Marcas reconocidas que garantizan confiabilidad.' },
-              { icon: <Layout />, title: 'Montaje limpio', desc: 'Cuidamos la estética y el orden en cada evento.' },
-              { icon: <Zap />, title: 'Opciones a medida', desc: 'Paquetes que se ajustan a tu presupuesto y necesidad.' },
-              { icon: <Mic2 />, title: 'Experiencia real', desc: 'Eventos desde 15 hasta 400 personas con éxito.' },
-              { icon: <Clock />, title: 'Respuesta rápida', desc: 'Cotizaciones y atención ágil por WhatsApp.' }
+              { icon: <Users />, title: 'Atención personalizada', desc: 'Te asesoramos para elegir el equipo o producto ideal.', color: 'blue' },
+              { icon: <ShieldCheck />, title: 'Calidad Garantizada', desc: 'Marcas profesionales en sonido y los mejores materiales en creatividad.', color: 'orange' },
+              { icon: <Layout />, title: 'Estética y Orden', desc: 'Cuidamos la imagen de tu evento y el acabado de tus productos.', color: 'green' },
+              { icon: <Zap />, title: 'Opciones a medida', desc: 'Paquetes y productos que se ajustan a tu presupuesto.', color: 'blue' },
+              { icon: <Mic2 />, title: 'Experiencia Real', desc: 'Creando atmósfera en eventos.', color: 'orange' },
+              { icon: <Clock />, title: 'Respuesta Rápida', desc: 'Cotizaciones y atención ágil por WhatsApp.', color: 'green' }
             ].map((card, i) => (
               <motion.div
                 key={i}
                 whileHover={{ y: -5 }}
-                className="p-8 rounded-3xl bg-slate-950 border border-white/5 hover:border-blue-300/30 transition-all"
+                className={`p-8 rounded-3xl bg-slate-950 border border-white/5 hover:border-${card.color === 'blue' ? 'blue-300' : card.color === 'orange' ? 'orange-500' : 'green-500'}/30 transition-all`}
               >
-                <div className="w-12 h-12 rounded-2xl bg-blue-300/10 flex items-center justify-center text-blue-300 mb-6">
+                <div className={`w-12 h-12 rounded-2xl ${card.color === 'blue' ? 'bg-blue-300/10 text-blue-300' : card.color === 'orange' ? 'bg-orange-500/10 text-orange-500' : 'bg-green-500/10 text-green-500'} flex items-center justify-center mb-6`}>
                   {card.icon}
                 </div>
                 <h4 className="text-xl font-bold mb-3">{card.title}</h4>
@@ -508,20 +605,22 @@ export default function App() {
       <section className="py-32 px-6 bg-black relative overflow-hidden">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">Proceso Simple y <span className="text-blue-300">Profesional</span></h2>
-            <p className="text-slate-400 max-w-2xl mx-auto text-lg">Hacemos que la organización técnica de tu evento sea la parte más fácil.</p>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">Proceso Simple y <span className="text-orange-500">Efectivo</span></h2>
+            <p className="text-slate-400 max-w-2xl mx-auto text-lg">Hacemos que tu proyecto o evento sea una realidad sin complicaciones.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
             {[
-              { step: "01", title: "Escríbenos por WhatsApp", desc: "Inicia tu cotización de forma rápida y directa." },
-              { step: "02", title: "Cuéntanos tu evento", desc: "Dinos qué necesitas, la fecha y la ubicación." },
-              { step: "03", title: "Paquete Ideal", desc: "Te recomendamos la mejor opción según tu presupuesto." },
-              { step: "04", title: "Montaje y Disfrute", desc: "Nosotros nos encargamos de todo lo técnico." }
+              { step: "01", title: "Escríbenos", desc: "Inicia tu cotización de forma rápida por WhatsApp.", color: "text-blue-300" },
+              { step: "02", title: "Cuéntanos tu idea", desc: "Dinos qué necesitas, la fecha o el diseño que buscas.", color: "text-orange-500" },
+              { step: "03", title: "Propuesta Ideal", desc: "Te recomendamos la mejor opción técnica o creativa.", color: "text-green-500" },
+              { step: "04", title: "Entrega y Disfrute", desc: "Nosotros nos encargamos de que todo salga perfecto.", color: "text-blue-300" }
             ].map((item, i) => (
               <div key={i} className="relative group">
-                <div className="text-8xl font-black text-white/5 absolute -top-10 -left-4 group-hover:text-blue-300/10 transition-colors">{item.step}</div>
-                <div className="relative pt-8">
+                <div className={`text-5xl font-black ${item.color}/20 mb-6 group-hover:${item.color}/40 transition-colors`}>
+                  {item.step}
+                </div>
+                <div>
                   <h4 className="text-xl font-bold mb-4 text-white">{item.title}</h4>
                   <p className="text-slate-400 leading-relaxed">{item.desc}</p>
                 </div>
@@ -534,49 +633,133 @@ export default function App() {
       {/* SUGGESTED PACKAGES */}
       <section id="packages" className="py-32 px-6 bg-slate-900">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-20">
+          <div className="text-center mb-12">
             <h2 className="text-4xl font-bold mb-4">Paquetes Sugeridos</h2>
-            <p className="text-slate-400">Orientación para tu evento (ajustable según necesidad).</p>
+            <p className="text-slate-400">Selecciona la división de tu interés para ver opciones.</p>
           </div>
 
+          {/* Toggle */}
+          <div className="flex justify-center mb-16">
+            <div className="bg-slate-950 p-1.5 rounded-2xl border border-white/5 flex gap-2">
+              <button 
+                onClick={() => setPackageType('sound')}
+                className={`px-8 py-3 rounded-xl font-bold text-sm transition-all flex items-center gap-2 ${packageType === 'sound' ? 'bg-blue-300 text-slate-900 shadow-lg' : 'text-slate-400 hover:text-white'}`}
+              >
+                <Music className="w-4 h-4" /> Ismo Sound
+              </button>
+              <button 
+                onClick={() => setPackageType('creativity')}
+                className={`px-8 py-3 rounded-xl font-bold text-sm transition-all flex items-center gap-2 ${packageType === 'creativity' ? 'bg-orange-500 text-white shadow-lg' : 'text-slate-400 hover:text-white'}`}
+              >
+                <Palette className="w-4 h-4" /> Ismo Creativity
+              </button>
+            </div>
+          </div>
+
+          {packageType === 'creativity' && (
+            <motion.div 
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-8 p-8 rounded-3xl bg-gradient-to-r from-orange-500/10 via-orange-500/5 to-transparent border border-orange-500/20 text-center"
+            >
+              <p className="text-xl md:text-2xl font-bold text-white">
+                "Elije el paquete ideal para ti y deja que nosotros hagamos la magia."
+              </p>
+            </motion.div>
+          )}
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { 
-                title: 'Paquete Básico', 
-                cap: '15–60 personas', 
-                features: ['Sonido claro y compacto', 'Ideal para reuniones pequeñas', '1 Micrófono incluido', 'Montaje básico'],
-                color: 'blue'
-              },
-              { 
-                title: 'Paquete Estándar', 
-                cap: '60–200 personas', 
-                features: ['Sonido potente (2 columnas)', 'Ideal para bodas y fiestas', '2 Micrófonos inalámbricos', 'Configuración profesional'],
-                color: 'orange',
-                popular: true
-              },
-              { 
-                title: 'Paquete Full Evento', 
-                cap: '200–400 personas', 
-                features: ['Sonido con subwoofers', 'Iluminación Par LED', 'Ideal para escenarios', 'Técnico de audio incluido'],
-                color: 'blue'
-              }
-            ].map((pkg, i) => (
-              <div key={i} className={`relative p-8 rounded-3xl bg-slate-950 border ${pkg.popular ? 'border-orange-500/50' : 'border-white/5'} flex flex-col`}>
-                {pkg.popular && <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-orange-500 text-white text-[10px] font-bold uppercase tracking-widest px-4 py-1 rounded-full">Más Popular</span>}
-                <h4 className="text-2xl font-bold mb-2">{pkg.title}</h4>
-                <p className="text-slate-500 text-sm mb-6">{pkg.cap}</p>
-                <ul className="space-y-4 mb-10 flex-grow">
-                  {pkg.features.map((f, j) => (
-                    <li key={j} className="flex items-start gap-3 text-sm text-slate-400">
-                      <CheckCircle2 className={`w-4 h-4 mt-0.5 ${pkg.color === 'orange' ? 'text-orange-500' : 'text-blue-300'}`} /> {f}
-                    </li>
-                  ))}
-                </ul>
-                <a href="#contact" className={`w-full py-4 rounded-xl font-black text-center transition-all flex items-center justify-center gap-2 ${pkg.color === 'orange' ? 'bg-orange-500 hover:bg-orange-600' : 'bg-blue-300 hover:bg-blue-400'} text-white shadow-lg`}>
-                  Consulta disponibilidad <MessageCircle className="w-5 h-5" />
-                </a>
-              </div>
-            ))}
+            {packageType === 'sound' ? (
+              <>
+                {[
+                  { 
+                    title: 'Paquete Básico', 
+                    cap: '15–60 personas', 
+                    features: ['Sonido claro y compacto', 'Ideal para reuniones pequeñas', '1 Micrófono incluido', 'Montaje básico'],
+                    color: 'blue'
+                  },
+                  { 
+                    title: 'Paquete Personalizado', 
+                    cap: 'A tu medida', 
+                    features: ['Diseñado según tus necesidades', 'Ideal para cualquier tipo de evento', 'Equipo premium seleccionado', 'Asesoría técnica completa'],
+                    color: 'orange',
+                    popular: true
+                  },
+                  { 
+                    title: 'Paquete Full Evento', 
+                    cap: '200–400 personas', 
+                    features: ['Sonido con subwoofers', 'Iluminación Par LED', 'Ideal para escenarios', 'Técnico de audio incluido'],
+                    color: 'blue'
+                  }
+                ].map((pkg, i) => (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    key={`sound-${i}`} 
+                    className={`relative p-8 rounded-3xl bg-slate-950 border ${pkg.popular ? 'border-orange-500/50' : 'border-white/5'} flex flex-col`}
+                  >
+                    {pkg.popular && <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-orange-500 text-white text-[10px] font-bold uppercase tracking-widest px-4 py-1 rounded-full">Más Popular</span>}
+                    <h4 className="text-2xl font-bold mb-2">{pkg.title}</h4>
+                    <p className="text-slate-500 text-sm mb-6">{pkg.cap}</p>
+                    <ul className="space-y-4 mb-10 flex-grow">
+                      {pkg.features.map((f, j) => (
+                        <li key={j} className="flex items-start gap-3 text-sm text-slate-400">
+                          <CheckCircle2 className={`w-4 h-4 mt-0.5 ${pkg.color === 'orange' ? 'text-orange-500' : 'text-blue-300'}`} /> {f}
+                        </li>
+                      ))}
+                    </ul>
+                    <a href="#contact" className={`w-full py-4 rounded-xl font-black text-center transition-all flex items-center justify-center gap-2 ${pkg.color === 'orange' ? 'bg-orange-500 hover:bg-orange-600' : 'bg-blue-300 hover:bg-blue-400'} text-white shadow-lg`}>
+                      Consulta disponibilidad <MessageCircle className="w-5 h-5" />
+                    </a>
+                  </motion.div>
+                ))}
+              </>
+            ) : (
+              <>
+                {[
+                  { 
+                    title: 'Pack Emprende bonito', 
+                    cap: 'Ideal para iniciar con estilo', 
+                    features: ['50 Stickers personalizados', '10 Tazas con tu logo', 'Diseño básico incluido', 'Acabado profesional'],
+                    color: 'orange'
+                  },
+                  { 
+                    title: 'Pack a tu medida', 
+                    cap: 'Creamos lo que imaginas', 
+                    features: ['¿Tienes una idea especial? ', 'La imaginacion no tiene límites', 'Pensado para momentos especiales'],
+                    color: 'green',
+                    popular: true
+                  },
+                  { 
+                    title: 'Pack Marca Creativa', 
+                    cap: 'Haz que tu marca se vea profesional', 
+                    features: ['100 Stickers premium', '50 Tazas de alta calidad', 'Empaque personalizado', 'Precio especial por volumen'],
+                    color: 'orange'
+                  }
+                ].map((pkg, i) => (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    key={`creativity-${i}`} 
+                    className={`relative p-8 rounded-3xl bg-slate-950 border ${pkg.popular ? 'border-green-500/50' : 'border-white/5'} flex flex-col`}
+                  >
+                    {pkg.popular && <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-green-600 text-white text-[10px] font-bold uppercase tracking-widest px-4 py-1 rounded-full">Más Cotizado</span>}
+                    <h4 className="text-2xl font-bold mb-2">{pkg.title}</h4>
+                    <p className="text-slate-500 text-sm mb-6">{pkg.cap}</p>
+                    <ul className="space-y-4 mb-10 flex-grow">
+                      {pkg.features.map((f, j) => (
+                        <li key={j} className="flex items-start gap-3 text-sm text-slate-400">
+                          <CheckCircle2 className={`w-4 h-4 mt-0.5 ${pkg.color === 'orange' ? 'text-orange-500' : 'text-green-500'}`} /> {f}
+                        </li>
+                      ))}
+                    </ul>
+                    <a href="#contact" className={`w-full py-4 rounded-xl font-black text-center transition-all flex items-center justify-center gap-2 ${pkg.color === 'orange' ? 'bg-orange-500 hover:bg-orange-600' : 'bg-green-600 hover:bg-green-700'} text-white shadow-lg`}>
+                      Solicita cotización <MessageCircle className="w-5 h-5" />
+                    </a>
+                  </motion.div>
+                ))}
+              </>
+            )}
           </div>
           <p className="text-center mt-12 text-slate-500 text-sm">* Todo se ajusta según el lugar y necesidad específica.</p>
         </div>
@@ -587,20 +770,73 @@ export default function App() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-20">
             <h2 className="text-4xl font-bold mb-4">Eventos Realizados</h2>
-            <p className="text-slate-400">Una muestra de nuestro trabajo profesional.</p>
+            <p className="text-slate-400">Una muestra de nuestro trabajo profesional. Fotos reales de Ismo Guate.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="aspect-video bg-white/5 rounded-2xl border border-white/10 flex flex-col items-center justify-center text-slate-600 group hover:border-blue-300/30 transition-all cursor-pointer overflow-hidden relative">
-                <ImageIcon className="w-8 h-8 mb-2 group-hover:scale-110 transition-transform" />
-                <span className="text-xs uppercase tracking-widest">Espacio para Foto Real</span>
-                <div className="absolute inset-0 bg-blue-300/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </div>
+            {galleryImages.map((img, i) => (
+              <motion.div 
+                key={i}
+                whileHover={{ scale: 1.02 }}
+                onClick={() => setSelectedImage(img.url)}
+                className="aspect-video bg-white/5 rounded-2xl border border-white/10 flex flex-col items-center justify-center text-slate-600 group hover:border-blue-300/30 transition-all cursor-pointer overflow-hidden relative"
+              >
+                <img 
+                  src={img.url} 
+                  alt={img.alt} 
+                  className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+                  onError={(e) => {
+                    // Fallback if image doesn't exist yet
+                    (e.target as HTMLImageElement).style.display = 'none';
+                    const parent = (e.target as HTMLImageElement).parentElement;
+                    if (parent) {
+                      const placeholder = parent.querySelector('.placeholder-content');
+                      if (placeholder) placeholder.classList.remove('hidden');
+                    }
+                  }}
+                  referrerPolicy="no-referrer"
+                />
+                <div className="placeholder-content hidden flex flex-col items-center justify-center p-4 text-center">
+                  <ImageIcon className="w-8 h-8 mb-2 text-slate-700" />
+                  <span className="text-[10px] uppercase tracking-widest text-slate-700">Foto: {img.alt}</span>
+                  <p className="text-[8px] mt-2 text-slate-800">Sube tu foto a /public/assets/gallery/{img.url.split('/').pop()}</p>
+                </div>
+                
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
+                  <p className="text-white font-bold text-sm">{img.title}</p>
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
+
+      {/* Lightbox Modal */}
+      {selectedImage && (
+        <div 
+          className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-sm flex items-center justify-center p-4 md:p-10"
+          onClick={() => setSelectedImage(null)}
+        >
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="relative max-w-5xl w-full max-h-full"
+          >
+            <img 
+              src={selectedImage} 
+              alt="Gallery Preview" 
+              className="w-full h-auto max-h-[85vh] object-contain rounded-xl shadow-2xl"
+              referrerPolicy="no-referrer"
+            />
+            <button 
+              className="absolute -top-12 right-0 text-white hover:text-blue-300 transition-colors font-bold flex items-center gap-2"
+              onClick={() => setSelectedImage(null)}
+            >
+              Cerrar ✕
+            </button>
+          </motion.div>
+        </div>
+      )}
 
       {/* CONTACT FORM SECTION */}
       <section id="contact" className="py-32 px-6 bg-slate-900 relative overflow-hidden">
@@ -614,11 +850,11 @@ export default function App() {
                 Contacto Directo
               </div>
               <h2 className="text-4xl md:text-6xl font-black tracking-tight leading-tight">
-                ¿Listo para elevar <br />
-                <span className="text-blue-300">tu próximo evento?</span>
+                ¿Listo para iniciar <br />
+                <span className="text-orange-500">tu proyecto?</span>
               </h2>
               <p className="text-slate-400 text-lg max-w-md">
-                Llena el formulario y nos pondremos en contacto contigo en menos de 24 horas para brindarte una propuesta personalizada.
+                Ya sea un evento espectacular o productos personalizados, estamos listos para ayudarte.
               </p>
               
               <div className="space-y-6 pt-8">
@@ -637,7 +873,7 @@ export default function App() {
                   </div>
                   <div>
                     <p className="text-xs text-slate-500 uppercase font-bold tracking-widest">Correo Electrónico</p>
-                    <p className="text-xl font-bold">info@ismoguate.com</p>
+                    <p className="text-xl font-bold">info@ismoguate.com.gt</p>
                   </div>
                 </div>
               </div>
@@ -653,16 +889,30 @@ export default function App() {
                   
                   // Construct WhatsApp message
                   const message = `Hola Ismo Guate! Me gustaría solicitar una cotización:%0A%0A` +
+                    `*Interés:* ${data.interest}%0A` +
                     `*Nombre:* ${data.name}%0A` +
-                    `*Evento:* ${data.event_type}%0A` +
+                    `*Evento/Proyecto:* ${data.event_type}%0A` +
                     `*Fecha:* ${data.date}%0A` +
-                    `*Personas:* ${data.people}%0A` +
+                    `*Cantidad/Personas:* ${data.people}%0A` +
                     `*Mensaje:* ${data.message}`;
                   
                   window.open(`https://wa.me/50245644861?text=${message}`, '_blank');
                 }}
                 className="space-y-6"
               >
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">División de Interés</label>
+                  <select 
+                    required
+                    name="interest"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-orange-500/50 transition-all text-white appearance-none"
+                  >
+                    <option className="bg-slate-900" value="Ismo Sound (Eventos)">Ismo Sound (Eventos)</option>
+                    <option className="bg-slate-900" value="Ismo Creativity (Personalizados)">Ismo Creativity (Personalizados)</option>
+                    <option className="bg-slate-900" value="Ambas Divisiones">Ambas Divisiones</option>
+                  </select>
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Nombre Completo</label>
@@ -671,19 +921,19 @@ export default function App() {
                       name="name"
                       type="text" 
                       placeholder="Ej. Juan Pérez"
-                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-blue-500/50 transition-all text-white placeholder:text-slate-600"
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-orange-500/50 transition-all text-white placeholder:text-slate-600"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Tipo de Evento</label>
+                    <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Tipo de Evento / Proyecto</label>
                     <select 
                       name="event_type"
-                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-blue-500/50 transition-all text-white appearance-none"
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-orange-500/50 transition-all text-white appearance-none"
                     >
-                      <option className="bg-slate-900" value="Boda">Boda</option>
-                      <option className="bg-slate-900" value="Fiesta de 15">Fiesta de 15</option>
+                      <option className="bg-slate-900" value="Boda">Boda</option>                      
                       <option className="bg-slate-900" value="Evento Corporativo">Evento Corporativo</option>
-                      <option className="bg-slate-900" value="Convivio">Convivio</option>
+                      <option className="bg-slate-900" value="Evento Social">Evento Social</option>
+                      <option className="bg-slate-900" value="Personalizados / Regalos">Personalizados / Regalos</option>
                       <option className="bg-slate-900" value="Otro">Otro</option>
                     </select>
                   </div>
@@ -691,27 +941,27 @@ export default function App() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Fecha del Evento</label>
+                    <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Fecha Estimada</label>
                     <div className="relative">
                       <Calendar className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                       <input 
                         required
                         name="date"
                         type="date" 
-                        className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-5 py-4 focus:outline-none focus:border-blue-500/50 transition-all text-white"
+                        className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-5 py-4 focus:outline-none focus:border-orange-500/50 transition-all text-white"
                       />
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">No. de Personas</label>
+                    <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Cantidad / Personas</label>
                     <div className="relative">
                       <Users className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                       <input 
                         required
                         name="people"
-                        type="number" 
-                        placeholder="Ej. 150"
-                        className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-5 py-4 focus:outline-none focus:border-blue-500/50 transition-all text-white placeholder:text-slate-600"
+                        type="text" 
+                        placeholder="Ej. 150 personas o 50 tazas"
+                        className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-5 py-4 focus:outline-none focus:border-orange-500/50 transition-all text-white placeholder:text-slate-600"
                       />
                     </div>
                   </div>
@@ -725,14 +975,14 @@ export default function App() {
                       name="message"
                       rows={4}
                       placeholder="Cuéntanos más sobre lo que necesitas..."
-                      className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-5 py-4 focus:outline-none focus:border-blue-500/50 transition-all text-white placeholder:text-slate-600 resize-none"
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-5 py-4 focus:outline-none focus:border-orange-500/50 transition-all text-white placeholder:text-slate-600 resize-none"
                     ></textarea>
                   </div>
                 </div>
 
                 <button 
                   type="submit"
-                  className="w-full bg-blue-300 hover:bg-blue-400 text-slate-900 py-5 rounded-2xl font-black text-lg transition-all shadow-xl shadow-blue-300/20 flex items-center justify-center gap-3 group"
+                  className="w-full bg-orange-500 hover:bg-orange-600 text-white py-5 rounded-2xl font-black text-lg transition-all shadow-xl shadow-orange-500/20 flex items-center justify-center gap-3 group"
                 >
                   Enviar Solicitud <Send className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                 </button>
@@ -762,12 +1012,12 @@ export default function App() {
               <h4 className="text-white font-bold uppercase tracking-widest text-xs">Contacto</h4>
               <p className="text-xl font-bold text-white">+502 4564 4861</p>
               <a href="#contact" className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#128C7E] px-6 py-3 rounded-full text-white font-black transition-all shadow-lg shadow-green-500/20">
-                Consulta disponibilidad <MessageCircle className="w-4 h-4" />
+                Consulta disponibilidad <WhatsAppIcon className="w-4 h-4" />
               </a>
             </div>
             <div className="space-y-4">
               <h4 className="text-white font-bold uppercase tracking-widest text-xs">Horario</h4>
-              <p>Domingo a Viernes: 8:00 AM - 6:00 PM</p>
+              <p>Lunes a Viernes: 8:00 AM - 6:00 PM</p>
             </div>
           </div>
           
@@ -791,13 +1041,13 @@ export default function App() {
 
       {/* Floating CTA */}
       <a 
-        href={whatsappLink}
+        href="#contact"
         className="fixed bottom-8 right-8 bg-[#25D366] hover:bg-[#128C7E] text-white p-4 rounded-full shadow-2xl z-50 transition-all hover:scale-110 flex items-center gap-2 group"
       >
         <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-500 font-bold whitespace-nowrap px-0 group-hover:px-2">
           Cotiza tu evento ahora
         </span>
-        <MessageCircle className="w-8 h-8" />
+        <WhatsAppIcon className="w-8 h-8" />
       </a>
     </div>
   );
