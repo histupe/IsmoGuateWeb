@@ -161,7 +161,7 @@ export default function App() {
             <a href="#contact" className="hover:text-white transition-colors">Contacto</a>
             
             <div className="flex items-center gap-4 ml-2 border-l border-white/10 pl-6">
-              <a href="https://www.facebook.com/ismoguate" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-blue-300 transition-all hover:scale-110">
+              <a href="https://www.facebook.com/profile.php?id=61572393180709" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-blue-300 transition-all hover:scale-110">
                 <Facebook className="w-4 h-4" />
               </a>
               <a href="https://www.instagram.com/ismo_guate" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-pink-500 transition-all hover:scale-110">
@@ -231,7 +231,7 @@ export default function App() {
             </a>
             
             <div className="pt-6 border-t border-white/10 flex items-center gap-8">
-              <a href="https://www.facebook.com/ismoguate" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-blue-300 transition-all">
+              <a href="https://www.facebook.com/profile.php?id=61572393180709" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-blue-300 transition-all">
                 <Facebook className="w-6 h-6" />
               </a>
               <a href="https://www.instagram.com/ismo_guate" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-pink-500 transition-all">
@@ -1022,7 +1022,7 @@ export default function App() {
           </div>
           
           <div className="flex justify-center gap-8 pt-4">
-            <a href="https://www.facebook.com/Ismo guate" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-blue-300 transition-all hover:scale-110">
+            <a href="https://www.facebook.com/profile.php?id=61572393180709" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-blue-300 transition-all hover:scale-110">
               <Facebook className="w-6 h-6" />
             </a>
             <a href="https://www.instagram.com/ismo_guate" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-pink-500 transition-all hover:scale-110">
