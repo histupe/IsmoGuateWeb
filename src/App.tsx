@@ -44,9 +44,11 @@ export default function App() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const whatsappNumber = "50245644861";
+  const creativityWhatsappNumber = "50239146137";
   const whatsappLink = `https://wa.me/${whatsappNumber}?text=Hola%20Ismo%20Sound%2C%20estoy%20por%20realizar%20un%20evento`;
-  const catalogLink = `https://wa.me/${whatsappNumber}?text=¡Hola%20Ismo%20Guate!%20¿Me%20envían%20el%20catálogo%20de%20Ismo%20Creativity?%20Vengo%20de%20la%20web`;
+  const catalogLink = `https://wa.me/${creativityWhatsappNumber}?text=¡Hola%20Ismo%20Guate!%20¿Me%20envían%20el%20catálogo%20de%20Ismo%20Creativity?%20Vengo%20de%20la%20web`;
   const quoteLink = `https://wa.me/${whatsappNumber}?text=Hola!%20Me%20gustaría%20cotizar%20un%20evento%20con%20Ismo%20Sound.`;
+  const creativityQuoteLink = `https://wa.me/${creativityWhatsappNumber}?text=Hola!%20Me%20gustaría%20solicitar%20una%20cotización%20para%20Ismo%20Creativity.`;
 
   // Logos from user input (Text-based for now as requested)
   const LogoGuate = () => (
@@ -658,7 +660,7 @@ export default function App() {
           </div>
 
           <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between mb-16">
-            <div className="flex justify-center lg:justify-start w-full">
+            <div className="flex justify-center w-full">
               <div className="bg-slate-950 p-1.5 rounded-2xl border border-white/5 flex gap-2">
                 <button 
                   onClick={() => setPackageType('sound')}
@@ -774,7 +776,7 @@ export default function App() {
                         </li>
                       ))}
                     </ul>
-                    <a href="#contact" className={`w-full py-4 rounded-xl font-black text-center transition-all flex items-center justify-center gap-2 ${pkg.color === 'orange' ? 'bg-orange-500 hover:bg-orange-600' : 'bg-green-600 hover:bg-green-700'} text-white shadow-lg`}>
+                    <a href={creativityQuoteLink} className={`w-full py-4 rounded-xl font-black text-center transition-all flex items-center justify-center gap-2 ${pkg.color === 'orange' ? 'bg-orange-500 hover:bg-orange-600' : 'bg-green-600 hover:bg-green-700'} text-white shadow-lg`}>
                       Solicita cotización <MessageCircle className="w-5 h-5" />
                     </a>
                   </motion.div>
@@ -917,7 +919,8 @@ export default function App() {
                     `*Cantidad/Personas:* ${data.people}%0A` +
                     `*Mensaje:* ${data.message}`;
                   
-                  window.open(`https://wa.me/50245644861?text=${message}`, '_blank');
+                  const destinationNumber = data.interest === 'Ismo Creativity (Personalizados)' ? creativityWhatsappNumber : whatsappNumber;
+                  window.open(`https://wa.me/${destinationNumber}?text=${message}`, '_blank');
                 }}
                 className="space-y-6"
               >
