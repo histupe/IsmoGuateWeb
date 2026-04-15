@@ -675,13 +675,6 @@ export default function App() {
               </div>
             </div>
 
-            <div className="flex justify-center lg:justify-end lg:w-auto">
-              <DivisionLogo
-                src={divisionLogos[packageType]}
-                alt={`Logo Ismo ${packageType === 'sound' ? 'Sound' : 'Creativity'}`}
-                className="w-14 h-14 object-contain"
-              />
-            </div>
           </div>
 
           {packageType === 'creativity' && (
@@ -1040,6 +1033,10 @@ export default function App() {
               <h4 className="text-white font-bold uppercase tracking-widest text-xs">Contacto</h4>
               <a href="tel:+50245644861" className="text-xl font-bold text-white hover:text-blue-200 transition-colors">+502 4564 4861</a>
               <a href="mailto:info@ismoguate.com.gt" className="block text-sm text-slate-400 hover:text-slate-200 transition-colors">info@ismoguate.com.gt</a>
+              <div className="mt-4 flex items-center justify-center gap-3 opacity-80">
+                <img src={divisionLogos.sound} alt="Ismo Sound" className="w-10 h-10 object-contain" />
+                <img src={divisionLogos.creativity} alt="Ismo Creativity" className="w-10 h-10 object-contain" />
+              </div>
               <a href="#contact" className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#128C7E] px-6 py-3 rounded-full text-white font-black transition-all shadow-lg shadow-green-500/20">
                 Consulta disponibilidad <WhatsAppIcon className="w-4 h-4" />
               </a>
