@@ -114,6 +114,33 @@ export default function App() {
     { url: '/assets/gallery/FOTO6.jpeg', alt: 'Ismo Creativity 3', title: 'Detalles Únicos' },
   ];
 
+  const GalleryCard = ({ img }: { img: { url: string; alt: string; title: string } }) => {
+    const [isVisible, setIsVisible] = useState(true);
+
+    if (!isVisible) {
+      return null;
+    }
+
+    return (
+      <motion.div
+        whileHover={{ scale: 1.02 }}
+        onClick={() => setSelectedImage(img.url)}
+        className="aspect-video bg-white/5 rounded-2xl border border-white/10 flex flex-col items-center justify-center text-slate-600 group hover:border-blue-300/30 transition-all cursor-pointer overflow-hidden relative"
+      >
+        <img
+          src={img.url}
+          alt={img.alt}
+          className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+          onError={() => setIsVisible(false)}
+          referrerPolicy="no-referrer"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
+          <p className="text-white font-bold text-sm">{img.title}</p>
+        </div>
+      </motion.div>
+    );
+  };
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -797,38 +824,8 @@ export default function App() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {galleryImages.map((img, i) => (
-              <motion.div 
-                key={i}
-                whileHover={{ scale: 1.02 }}
-                onClick={() => setSelectedImage(img.url)}
-                className="aspect-video bg-white/5 rounded-2xl border border-white/10 flex flex-col items-center justify-center text-slate-600 group hover:border-blue-300/30 transition-all cursor-pointer overflow-hidden relative"
-              >
-                <img 
-                  src={img.url} 
-                  alt={img.alt} 
-                  className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
-                  onError={(e) => {
-                    // Fallback if image doesn't exist yet
-                    (e.target as HTMLImageElement).style.display = 'none';
-                    const parent = (e.target as HTMLImageElement).parentElement;
-                    if (parent) {
-                      const placeholder = parent.querySelector('.placeholder-content');
-                      if (placeholder) placeholder.classList.remove('hidden');
-                    }
-                  }}
-                  referrerPolicy="no-referrer"
-                />
-                <div className="placeholder-content hidden flex flex-col items-center justify-center p-4 text-center">
-                  <ImageIcon className="w-8 h-8 mb-2 text-slate-700" />
-                  <span className="text-[10px] uppercase tracking-widest text-slate-700">Foto: {img.alt}</span>
-                  <p className="text-[8px] mt-2 text-slate-800">Sube tu foto a /public/assets/gallery/{img.url.split('/').pop()}</p>
-                </div>
-                
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
-                  <p className="text-white font-bold text-sm">{img.title}</p>
-                </div>
-              </motion.div>
+            {galleryImages.map((img) => (
+              <GalleryCard key={img.url} img={img} />
             ))}
           </div>
         </div>
@@ -921,6 +918,7 @@ export default function App() {
                   
                   const destinationNumber = data.interest === 'Ismo Creativity (Personalizados)' ? creativityWhatsappNumber : whatsappNumber;
                   window.open(`https://wa.me/${destinationNumber}?text=${message}`, '_blank');
+                  e.currentTarget.reset();
                 }}
                 className="space-y-6"
               >
