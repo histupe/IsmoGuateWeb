@@ -59,14 +59,14 @@ export default function App() {
   const LogoSound = ({ className = "text-3xl" }: { className?: string }) => (
     <span className={`${className} font-sans font-bold tracking-tight`}>
       <span className="text-blue-300">ISMO</span>
-      <span className="text-white">SOUND</span>
+      <span className="text-white" translate="no">SOUND</span>
     </span>
   );
 
   const LogoCreativity = ({ className = "text-3xl", dark = false }: { className?: string, dark?: boolean }) => (
     <span className={`${className} font-sans font-bold tracking-tight`}>
       <span className="text-orange-500">ISMO</span>
-      <span className="text-green-500">CREATIVITY</span>
+      <span className="text-green-500" translate="no">CREATIVITY</span>
     </span>
   );
 
@@ -155,8 +155,8 @@ export default function App() {
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
-            <a href="#sound" className="hover:text-blue-300 transition-colors">Ismo Sound</a>
-            <a href="#creativity" className="hover:text-orange-400 transition-colors">Ismo Creativity</a>
+            <a href="#sound" className="hover:text-blue-300 transition-colors">Ismo <span translate="no">Sound</span></a>
+            <a href="#creativity" className="hover:text-orange-400 transition-colors">Ismo <span translate="no">Creativity</span></a>
             <a href="#packages" className="hover:text-white transition-colors">Paquetes</a>
             <a href="#contact" className="hover:text-white transition-colors">Contacto</a>
             
@@ -206,14 +206,14 @@ export default function App() {
               onClick={() => setIsMenuOpen(false)}
               className="text-lg font-bold text-slate-300 hover:text-blue-300 transition-colors"
             >
-              Ismo Sound
+              Ismo <span translate="no">Sound</span>
             </a>
             <a 
               href="#creativity" 
               onClick={() => setIsMenuOpen(false)}
               className="text-lg font-bold text-slate-300 hover:text-orange-400 transition-colors"
             >
-              Ismo Creativity
+              Ismo <span translate="no">Creativity</span>
             </a>
             <a 
               href="#packages" 
@@ -292,14 +292,14 @@ export default function App() {
               <div className="flex items-center gap-3">
                 <div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
                 <p className="text-lg md:text-xl text-white font-sans font-bold tracking-wide">
-                  Ismo Sound <span className="text-slate-500 font-light mx-1 font-sans">|</span> <span className="text-slate-300 font-medium font-sans">Audio profesional</span>
+                  Ismo <span translate="no">Sound</span> <span className="text-slate-500 font-light mx-1 font-sans">|</span> <span className="text-slate-300 font-medium font-sans">Audio profesional</span>
                 </p>
               </div>
               <div className="hidden md:block w-px h-4 bg-white/10"></div>
               <div className="flex items-center gap-3">
                 <div className="w-1.5 h-1.5 rounded-full bg-orange-500"></div>
                 <p className="text-lg md:text-xl text-white font-sans font-bold tracking-wide">
-                  Ismo Creativity <span className="text-slate-500 font-light mx-1 font-sans">|</span> <span className="text-slate-300 font-medium font-sans">Personalizados y papelería creativa</span>
+                  Ismo <span translate="no">Creativity</span> <span className="text-slate-500 font-light mx-1 font-sans">|</span> <span className="text-slate-300 font-medium font-sans">Personalizados y papelería creativa</span>
                 </p>
               </div>
             </motion.div>
@@ -645,13 +645,13 @@ export default function App() {
                 onClick={() => setPackageType('sound')}
                 className={`px-8 py-3 rounded-xl font-bold text-sm transition-all flex items-center gap-2 ${packageType === 'sound' ? 'bg-blue-300 text-slate-900 shadow-lg' : 'text-slate-400 hover:text-white'}`}
               >
-                <Music className="w-4 h-4" /> Ismo Sound
+                <Music className="w-4 h-4" /> Ismo <span translate="no">Sound</span>
               </button>
               <button 
                 onClick={() => setPackageType('creativity')}
                 className={`px-8 py-3 rounded-xl font-bold text-sm transition-all flex items-center gap-2 ${packageType === 'creativity' ? 'bg-orange-500 text-white shadow-lg' : 'text-slate-400 hover:text-white'}`}
               >
-                <Palette className="w-4 h-4" /> Ismo Creativity
+                <Palette className="w-4 h-4" /> Ismo <span translate="no">Creativity</span>
               </button>
             </div>
           </div>
@@ -907,8 +907,8 @@ export default function App() {
                     name="interest"
                     className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-orange-500/50 transition-all text-white appearance-none"
                   >
-                    <option className="bg-slate-900" value="Ismo Sound (Eventos)">Ismo Sound (Eventos)</option>
-                    <option className="bg-slate-900" value="Ismo Creativity (Personalizados)">Ismo Creativity (Personalizados)</option>
+                    <option translate="no" className="bg-slate-900" value="Ismo Sound (Eventos)">Ismo Sound (Eventos)</option>
+                    <option translate="no" className="bg-slate-900" value="Ismo Creativity (Personalizados)">Ismo Creativity (Personalizados)</option>
                     <option className="bg-slate-900" value="Ambas Divisiones">Ambas Divisiones</option>
                   </select>
                 </div>
