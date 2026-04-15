@@ -102,13 +102,12 @@ export default function App() {
 
   // Division illustration sources
   const photoSound1 = "/assets/divisions/division_sound.svg";
-  const photoLighting = "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=800";
   const photoCreativity1 = "/assets/divisions/division_creativity.svg";
 
   const galleryImages = [
     { url: '/assets/gallery/FOTO1.jpeg', alt: 'Evento Ismo Sound 1', title: 'Sonido e Iluminación' },
     { url: '/assets/gallery/FOTO2.jpeg', alt: 'Evento Ismo Sound 2', title: 'Montaje Profesional' },
-    { url: '/assets/gallery/FOTO3.jpeg', alt: 'Ismo Creativity 1', title: 'Personalizados' },
+    { url: '/assets/gallery/FOTO3.jpeg', alt: 'Ismo Creativity 1', title: 'Tiempo de reflexion' },
     { url: '/assets/gallery/FOTO4.jpeg', alt: 'Ismo Creativity 2', title: 'Papelería Creativa' },
     { url: '/assets/gallery/FOTO5.jpeg', alt: 'Evento Ismo Sound 3', title: 'Atmosfera Premium' },
     { url: '/assets/gallery/FOTO6.jpeg', alt: 'Ismo Creativity 3', title: 'Detalles Únicos' },
