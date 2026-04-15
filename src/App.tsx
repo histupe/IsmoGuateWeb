@@ -101,8 +101,8 @@ export default function App() {
   );
 
   // Division illustration sources
-  const photoSound1 = "/assets/divisions/division_sound.svg";
-  const photoCreativity1 = "/assets/divisions/division_creativity.svg";
+  const photoSound1 = "assets/divisions/division_sound.svg";
+  const photoCreativity1 = "assets/divisions/division_creativity.svg";
 
   const galleryImages = [
     { url: '/assets/gallery/FOTO1.jpeg', alt: 'Evento Ismo Sound 1', title: 'Sonido e Iluminación' },
