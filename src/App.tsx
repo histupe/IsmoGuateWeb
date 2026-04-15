@@ -70,6 +70,23 @@ export default function App() {
     </span>
   );
 
+  const divisionLogos = {
+    sound: '/assets/logos/ismo_sound.svg',
+    creativity: '/assets/logos/ismo_creativity.svg'
+  };
+
+  const DivisionLogo = ({ src, alt }: { src: string, alt: string }) => (
+    <img
+      src={src}
+      alt={alt}
+      className="w-14 h-14 object-contain"
+      onError={(e) => {
+        const target = e.currentTarget as HTMLImageElement;
+        target.style.display = 'none';
+      }}
+    />
+  );
+
   const WhatsAppIcon = ({ className = "w-6 h-6" }: { className?: string }) => (
     <svg 
       viewBox="0 0 24 24" 
@@ -405,7 +422,8 @@ export default function App() {
         <div className="absolute inset-0 speaker-mesh-large opacity-5 -z-10" />
         <div className="absolute top-0 right-0 w-1/2 h-full bg-orange-500/5 blur-[120px] -z-10" />
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-center gap-4 mb-16">
+          <div className="flex items-center gap-6 mb-16">
+            <DivisionLogo src={divisionLogos.sound} alt="Logo Ismo Sound" />
             <LogoSound className="text-4xl" />
             <div className="h-px flex-grow bg-blue-300/20" />
           </div>
@@ -506,7 +524,8 @@ export default function App() {
       {/* ISMO CREATIVITY SECTION */}
       <section id="creativity" className="py-32 px-6 border-t border-white/5 bg-white text-slate-900">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-center gap-4 mb-16">
+          <div className="flex items-center gap-6 mb-16">
+            <DivisionLogo src={divisionLogos.creativity} alt="Logo Ismo Creativity" />
             <LogoCreativity className="text-4xl" dark />
             <div className="h-px flex-grow bg-slate-200" />
           </div>
