@@ -100,10 +100,10 @@ export default function App() {
     </svg>
   );
 
-  // Placeholder for user photos
-  const photoSound1 = "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&q=80&w=800";
+  // Division illustration sources
+  const photoSound1 = "/assets/divisions/division_sound.svg";
   const photoLighting = "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=800";
-  const photoCreativity1 = "https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&q=80&w=800";
+  const photoCreativity1 = "/assets/divisions/division_creativity.svg";
 
   const galleryImages = [
     { url: '/assets/gallery/FOTO1.jpeg', alt: 'Evento Ismo Sound 1', title: 'Sonido e Iluminación' },
