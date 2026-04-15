@@ -75,11 +75,11 @@ export default function App() {
     creativity: '/assets/logos/ismo_creativity.svg'
   };
 
-  const DivisionLogo = ({ src, alt }: { src: string, alt: string }) => (
+  const DivisionLogo = ({ src, alt, className = "w-14 h-14 object-contain" }: { src: string, alt: string, className?: string }) => (
     <img
       src={src}
       alt={alt}
-      className="w-14 h-14 object-contain"
+      className={className}
       onError={(e) => {
         const target = e.currentTarget as HTMLImageElement;
         target.style.display = 'none';
@@ -687,98 +687,119 @@ export default function App() {
             </motion.div>
           )}
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {packageType === 'sound' ? (
-              <>
-                {[
-                  { 
-                    title: 'Paquete Básico', 
-                    cap: '15–60 personas', 
-                    features: ['Sonido claro y compacto', 'Ideal para reuniones pequeñas', '1 Micrófono incluido', 'Montaje básico'],
-                    color: 'blue'
-                  },
-                  { 
-                    title: 'Paquete Personalizado', 
-                    cap: 'A tu medida', 
-                    features: ['Diseñado según tus necesidades', 'Ideal para cualquier tipo de evento', 'Equipo premium seleccionado', 'Asesoría técnica completa'],
-                    color: 'orange',
-                    popular: true
-                  },
-                  { 
-                    title: 'Paquete Full Evento', 
-                    cap: '200–400 personas', 
-                    features: ['Sonido con subwoofers', 'Iluminación Par LED', 'Ideal para escenarios', 'Técnico de audio incluido'],
-                    color: 'blue'
-                  }
-                ].map((pkg, i) => (
-                  <motion.div 
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    key={`sound-${i}`} 
-                    className={`relative p-8 rounded-3xl bg-slate-950 border ${pkg.popular ? 'border-orange-500/50' : 'border-white/5'} flex flex-col`}
-                  >
-                    {pkg.popular && <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-orange-500 text-white text-[10px] font-bold uppercase tracking-widest px-4 py-1 rounded-full">Más Popular</span>}
-                    <h4 className="text-2xl font-bold mb-2">{pkg.title}</h4>
-                    <p className="text-slate-500 text-sm mb-6">{pkg.cap}</p>
-                    <ul className="space-y-4 mb-10 flex-grow">
-                      {pkg.features.map((f, j) => (
-                        <li key={j} className="flex items-start gap-3 text-sm text-slate-400">
-                          <CheckCircle2 className={`w-4 h-4 mt-0.5 ${pkg.color === 'orange' ? 'text-orange-500' : 'text-blue-300'}`} /> {f}
-                        </li>
-                      ))}
-                    </ul>
-                    <a href="#contact" className={`w-full py-4 rounded-xl font-black text-center transition-all flex items-center justify-center gap-2 ${pkg.color === 'orange' ? 'bg-orange-500 hover:bg-orange-600' : 'bg-blue-300 hover:bg-blue-400'} text-white shadow-lg`}>
-                      Consulta disponibilidad <MessageCircle className="w-5 h-5" />
-                    </a>
-                  </motion.div>
-                ))}
-              </>
-            ) : (
-              <>
-                {[
-                  { 
-                    title: 'Pack Emprende bonito', 
-                    cap: 'Ideal para iniciar con estilo', 
-                    features: ['50 Stickers personalizados', '10 Tazas con tu logo', 'Diseño básico incluido', 'Acabado profesional'],
-                    color: 'orange'
-                  },
-                  { 
-                    title: 'Pack a tu medida', 
-                    cap: 'Creamos lo que imaginas', 
-                    features: ['¿Tienes una idea especial? ', 'La imaginacion no tiene límites', 'Pensado para momentos especiales'],
-                    color: 'green',
-                    popular: true
-                  },
-                  { 
-                    title: 'Pack Marca Creativa', 
-                    cap: 'Haz que tu marca se vea profesional', 
-                    features: ['100 Stickers premium', '50 Tazas de alta calidad', 'Empaque personalizado', 'Precio especial por volumen'],
-                    color: 'orange'
-                  }
-                ].map((pkg, i) => (
-                  <motion.div 
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    key={`creativity-${i}`} 
-                    className={`relative p-8 rounded-3xl bg-slate-950 border ${pkg.popular ? 'border-green-500/50' : 'border-white/5'} flex flex-col`}
-                  >
-                    {pkg.popular && <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-green-600 text-white text-[10px] font-bold uppercase tracking-widest px-4 py-1 rounded-full">Más Cotizado</span>}
-                    <h4 className="text-2xl font-bold mb-2">{pkg.title}</h4>
-                    <p className="text-slate-500 text-sm mb-6">{pkg.cap}</p>
-                    <ul className="space-y-4 mb-10 flex-grow">
-                      {pkg.features.map((f, j) => (
-                        <li key={j} className="flex items-start gap-3 text-sm text-slate-400">
-                          <CheckCircle2 className={`w-4 h-4 mt-0.5 ${pkg.color === 'orange' ? 'text-orange-500' : 'text-green-500'}`} /> {f}
-                        </li>
-                      ))}
-                    </ul>
-                    <a href="#contact" className={`w-full py-4 rounded-xl font-black text-center transition-all flex items-center justify-center gap-2 ${pkg.color === 'orange' ? 'bg-orange-500 hover:bg-orange-600' : 'bg-green-600 hover:bg-green-700'} text-white shadow-lg`}>
-                      Solicita cotización <MessageCircle className="w-5 h-5" />
-                    </a>
-                  </motion.div>
-                ))}
-              </>
-            )}
+          <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8 items-start">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {packageType === 'sound' ? (
+                <>
+                  {[
+                    { 
+                      title: 'Paquete Básico', 
+                      cap: '15–60 personas', 
+                      features: ['Sonido claro y compacto', 'Ideal para reuniones pequeñas', '1 Micrófono incluido', 'Montaje básico'],
+                      color: 'blue'
+                    },
+                    { 
+                      title: 'Paquete Personalizado', 
+                      cap: 'A tu medida', 
+                      features: ['Diseñado según tus necesidades', 'Ideal para cualquier tipo de evento', 'Equipo premium seleccionado', 'Asesoría técnica completa'],
+                      color: 'orange',
+                      popular: true
+                    },
+                    { 
+                      title: 'Paquete Full Evento', 
+                      cap: '200–400 personas', 
+                      features: ['Sonido con subwoofers', 'Iluminación Par LED', 'Ideal para escenarios', 'Técnico de audio incluido'],
+                      color: 'blue'
+                    }
+                  ].map((pkg, i) => (
+                    <motion.div 
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      key={`sound-${i}`} 
+                      className={`relative p-8 rounded-3xl bg-slate-950 border ${pkg.popular ? 'border-orange-500/50' : 'border-white/5'} flex flex-col`}
+                    >
+                      {pkg.popular && <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-orange-500 text-white text-[10px] font-bold uppercase tracking-widest px-4 py-1 rounded-full">Más Popular</span>}
+                      <h4 className="text-2xl font-bold mb-2">{pkg.title}</h4>
+                      <p className="text-slate-500 text-sm mb-6">{pkg.cap}</p>
+                      <ul className="space-y-4 mb-10 flex-grow">
+                        {pkg.features.map((f, j) => (
+                          <li key={j} className="flex items-start gap-3 text-sm text-slate-400">
+                            <CheckCircle2 className={`w-4 h-4 mt-0.5 ${pkg.color === 'orange' ? 'text-orange-500' : 'text-blue-300'}`} /> {f}
+                          </li>
+                        ))}
+                      </ul>
+                      <a href="#contact" className={`w-full py-4 rounded-xl font-black text-center transition-all flex items-center justify-center gap-2 ${pkg.color === 'orange' ? 'bg-orange-500 hover:bg-orange-600' : 'bg-blue-300 hover:bg-blue-400'} text-white shadow-lg`}>
+                        Consulta disponibilidad <MessageCircle className="w-5 h-5" />
+                      </a>
+                    </motion.div>
+                  ))}
+                </>
+              ) : (
+                <>
+                  {[
+                    { 
+                      title: 'Pack Emprende bonito', 
+                      cap: 'Ideal para iniciar con estilo', 
+                      features: ['50 Stickers personalizados', '10 Tazas con tu logo', 'Diseño básico incluido', 'Acabado profesional'],
+                      color: 'orange'
+                    },
+                    { 
+                      title: 'Pack a tu medida', 
+                      cap: 'Creamos lo que imaginas', 
+                      features: ['¿Tienes una idea especial? ', 'La imaginacion no tiene límites', 'Pensado para momentos especiales'],
+                      color: 'green',
+                      popular: true
+                    },
+                    { 
+                      title: 'Pack Marca Creativa', 
+                      cap: 'Haz que tu marca se vea profesional', 
+                      features: ['100 Stickers premium', '50 Tazas de alta calidad', 'Empaque personalizado', 'Precio especial por volumen'],
+                      color: 'orange'
+                    }
+                  ].map((pkg, i) => (
+                    <motion.div 
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      key={`creativity-${i}`} 
+                      className={`relative p-8 rounded-3xl bg-slate-950 border ${pkg.popular ? 'border-green-500/50' : 'border-white/5'} flex flex-col`}
+                    >
+                      {pkg.popular && <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-green-600 text-white text-[10px] font-bold uppercase tracking-widest px-4 py-1 rounded-full">Más Cotizado</span>}
+                      <h4 className="text-2xl font-bold mb-2">{pkg.title}</h4>
+                      <p className="text-slate-500 text-sm mb-6">{pkg.cap}</p>
+                      <ul className="space-y-4 mb-10 flex-grow">
+                        {pkg.features.map((f, j) => (
+                          <li key={j} className="flex items-start gap-3 text-sm text-slate-400">
+                            <CheckCircle2 className={`w-4 h-4 mt-0.5 ${pkg.color === 'orange' ? 'text-orange-500' : 'text-green-500'}`} /> {f}
+                          </li>
+                        ))}
+                      </ul>
+                      <a href="#contact" className={`w-full py-4 rounded-xl font-black text-center transition-all flex items-center justify-center gap-2 ${pkg.color === 'orange' ? 'bg-orange-500 hover:bg-orange-600' : 'bg-green-600 hover:bg-green-700'} text-white shadow-lg`}>
+                        Solicita cotización <MessageCircle className="w-5 h-5" />
+                      </a>
+                    </motion.div>
+                  ))}
+                </>
+              )}
+            </div>
+
+            <div className="flex items-start justify-center">
+              <div className="sticky top-28 w-full max-w-xs rounded-3xl bg-white/5 border border-white/10 p-8 text-center shadow-2xl backdrop-blur-xl">
+                <p className="text-xs uppercase tracking-[0.38em] text-slate-400 mb-6">Logo seleccionado</p>
+                <DivisionLogo
+                  src={divisionLogos[packageType]}
+                  alt={`Logo Ismo ${packageType === 'sound' ? 'Sound' : 'Creativity'}`}
+                  className="mx-auto w-36 h-36"
+                />
+                <h3 className={`mt-8 text-2xl font-bold ${packageType === 'sound' ? 'text-blue-300' : 'text-orange-400'}`}>
+                  Ismo {packageType === 'sound' ? 'Sound' : 'Creativity'}
+                </h3>
+                <p className="mt-3 text-sm text-slate-400 leading-relaxed">
+                  {packageType === 'sound'
+                    ? 'Aquí ves el logo de Ismo Sound mientras eliges paquetes de audio y iluminación.'
+                    : 'Aquí ves el logo de Ismo Creativity mientras eliges paquetes creativos y personalizados.'}
+                </p>
+              </div>
+            </div>
           </div>
           <p className="text-center mt-12 text-slate-500 text-sm">* Todo se ajusta según el lugar y necesidad específica.</p>
         </div>
