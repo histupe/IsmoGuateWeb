@@ -864,7 +864,7 @@ export default function App() {
                   </div>
                   <div>
                     <p className="text-xs text-slate-500 uppercase font-bold tracking-widest">Llámanos o Escríbenos</p>
-                    <p className="text-xl font-bold">+502 4564 4861</p>
+                    <a href="tel:+50245644861" className="text-xl font-bold text-white hover:text-blue-200 transition-colors">+502 4564 4861</a>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
@@ -873,7 +873,7 @@ export default function App() {
                   </div>
                   <div>
                     <p className="text-xs text-slate-500 uppercase font-bold tracking-widest">Correo Electrónico</p>
-                    <p className="text-xl font-bold">info@ismoguate.com.gt</p>
+                    <a href="mailto:info@ismoguate.com.gt" className="text-xl font-bold text-white hover:text-orange-200 transition-colors">info@ismoguate.com.gt</a>
                   </div>
                 </div>
               </div>
@@ -1010,7 +1010,8 @@ export default function App() {
             </div>
             <div className="space-y-4">
               <h4 className="text-white font-bold uppercase tracking-widest text-xs">Contacto</h4>
-              <p className="text-xl font-bold text-white">+502 4564 4861</p>
+              <a href="tel:+50245644861" className="text-xl font-bold text-white hover:text-blue-200 transition-colors">+502 4564 4861</a>
+              <a href="mailto:info@ismoguate.com.gt" className="block text-sm text-slate-400 hover:text-slate-200 transition-colors">info@ismoguate.com.gt</a>
               <a href="#contact" className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#128C7E] px-6 py-3 rounded-full text-white font-black transition-all shadow-lg shadow-green-500/20">
                 Consulta disponibilidad <WhatsAppIcon className="w-4 h-4" />
               </a>
