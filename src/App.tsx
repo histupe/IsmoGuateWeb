@@ -44,7 +44,7 @@ export default function App() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const whatsappNumber = "50245644861";
-  const whatsappLink = `https://wa.me/${whatsappNumber}?text=Hola!%20Vengo%20de%20la%20página%20web%20y%20quisiera%20más%20información.`;
+  const whatsappLink = `https://wa.me/${whatsappNumber}?text=Hola%20Ismo%20Sound%2C%20estoy%20por%20realizar%20un%20evento`;
   const catalogLink = `https://wa.me/${whatsappNumber}?text=¡Hola%20Ismo%20Guate!%20¿Me%20envían%20el%20catálogo%20de%20Ismo%20Creativity?%20Vengo%20de%20la%20web`;
   const quoteLink = `https://wa.me/${whatsappNumber}?text=Hola!%20Me%20gustaría%20cotizar%20un%20evento%20con%20Ismo%20Sound.`;
 
@@ -880,7 +880,7 @@ export default function App() {
             </div>
 
             {/* Right Side: Form */}
-            <div className="glass p-8 md:p-12 rounded-[2.5rem] border-white/10 shadow-2xl">
+            <div className="glass bg-slate-950/95 p-8 md:p-12 rounded-[2.5rem] border-white/10 shadow-2xl">
               <form 
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -1022,7 +1022,7 @@ export default function App() {
           </div>
           
           <div className="flex justify-center gap-8 pt-4">
-            <a href="https://www.facebook.com/ismoguate" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-blue-300 transition-all hover:scale-110">
+            <a href="https://www.facebook.com/Ismo guate" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-blue-300 transition-all hover:scale-110">
               <Facebook className="w-6 h-6" />
             </a>
             <a href="https://www.instagram.com/ismo_guate" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-pink-500 transition-all hover:scale-110">
@@ -1041,7 +1041,9 @@ export default function App() {
 
       {/* Floating CTA */}
       <a 
-        href="#contact"
+        href={whatsappLink}
+        target="_blank"
+        rel="noopener noreferrer"
         className="fixed bottom-8 right-8 bg-[#25D366] hover:bg-[#128C7E] text-white p-4 rounded-full shadow-2xl z-50 transition-all hover:scale-110 flex items-center gap-2 group"
       >
         <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-500 font-bold whitespace-nowrap px-0 group-hover:px-2">
