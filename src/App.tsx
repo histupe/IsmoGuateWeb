@@ -74,7 +74,8 @@ export default function App() {
 
   const divisionLogos = {
     sound: '/assets/logos/ismo_sound.svg',
-    creativity: '/assets/logos/ismo_creativity.svg'
+    creativity: '/assets/logos/ismo_creativity.svg' ,
+    creativityWhite: '/assets/logos/ismo_creativity_white.svg'
   };
 
   const DivisionLogo = ({ src, alt, className = "w-20 h-20 object-contain" }: { src: string, alt: string, className?: string }) => (
@@ -111,7 +112,7 @@ export default function App() {
     { url: '/assets/gallery/foto4.svg', alt: 'Evento Ismo Sound 4', title: 'Sonido de calidad' },
     { url: '/assets/gallery/foto5.svg', alt: 'Evento Ismo Sound 5', title: 'Tiempo de reflexion' },
     { url: '/assets/gallery/foto6.svg', alt: 'Evento Ismo Sound 6', title: 'Asistencia personalizada' },
-    { url: '/assets/gallery/foto1.svg', alt: 'Ismo Creativity 1', title: 'Creatividad' },
+    { url: '/assets/gallery/foto7.svg', alt: 'Ismo Creativity 1', title: 'Creatividad' },
   ];
 
   const GalleryCard = ({ img }: { img: { url: string; alt: string; title: string } }) => {
@@ -1035,8 +1036,8 @@ export default function App() {
               <a href="tel:+50245644861" className="text-xl font-bold text-white hover:text-blue-200 transition-colors">+502 4564 4861</a>
               <a href="mailto:info@ismoguate.com.gt" className="block text-sm text-slate-400 hover:text-slate-200 transition-colors">info@ismoguate.com.gt</a>
               <div className="mt-4 flex items-center justify-center gap-3 opacity-80">
-                <img src={divisionLogos.sound} alt="Ismo Sound" className="w-16 h-16 object-contain" />
-                <img src={divisionLogos.creativity} alt="Ismo Creativity" className="w-16 h-16 object-contain" />
+                <img src={divisionLogos.sound} alt="Ismo Sound" className="w-20 h-20 object-contain" />
+                <img src={divisionLogos.creativityWhite} alt="Ismo Creativity" className="w-20 h-20 object-contain" />
               </div>
               <a href="#contact" className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#128C7E] px-6 py-3 rounded-full text-white font-black transition-all shadow-lg shadow-green-500/20">
                 Consulta disponibilidad <WhatsAppIcon className="w-4 h-4" />
