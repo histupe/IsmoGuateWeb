@@ -105,12 +105,13 @@ export default function App() {
   const photoCreativity1 = "assets/divisions/division_creativity.svg";
 
   const galleryImages = [
-    { url: '/assets/gallery/foto1.svg', alt: 'Evento Ismo Sound 1', title: 'Sonido e Iluminación' },
-    { url: '/assets/gallery/foto2.svg', alt: 'Evento Ismo Sound 2', title: 'Montaje Profesional' },
-    { url: '/assets/gallery/foto3.svg', alt: 'Ismo Creativity 1', title: 'Tiempo de reflexion' },
-    { url: '/assets/gallery/foto4.svg', alt: 'Ismo Creativity 2', title: 'Papelería Creativa' },
-    { url: '/assets/gallery/foto5.svg', alt: 'Evento Ismo Sound 3', title: 'Atmosfera Premium' },
-    { url: '/assets/gallery/foto6.svg', alt: 'Ismo Creativity 3', title: 'Detalles Únicos' },
+    { url: '/assets/gallery/foto1.svg', alt: 'Evento Ismo Sound 1', title: 'Montaje Profesional' },
+    { url: '/assets/gallery/foto2.svg', alt: 'Evento Ismo Sound 2', title: 'Sonido e Iluminación' },
+    { url: '/assets/gallery/foto3.svg', alt: 'Evento Ismo Sound 3', title: 'Equipos premium' },
+    { url: '/assets/gallery/foto4.svg', alt: 'Evento Ismo Sound 4', title: 'Sonido de calidad' },
+    { url: '/assets/gallery/foto5.svg', alt: 'Evento Ismo Sound 5', title: 'Tiempo de reflexion' },
+    { url: '/assets/gallery/foto6.svg', alt: 'Evento Ismo Sound 6', title: 'Asistencia personalizada' },
+    { url: '/assets/gallery/foto1.svg', alt: 'Ismo Creativity 1', title: 'Creatividad' },
   ];
 
   const GalleryCard = ({ img }: { img: { url: string; alt: string; title: string } }) => {
