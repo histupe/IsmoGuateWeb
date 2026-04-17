@@ -74,7 +74,7 @@ export default function App() {
 
   const divisionLogos = {
     sound: '/assets/logos/ismo_sound.svg',
-    creativity: '/assets/logos/ismo_creativity.svg' ,
+    creativity: '/assets/logos/ismo_creativity.svg',
     creativityWhite: '/assets/logos/ismo_creativity_white.svg'
   };
 
