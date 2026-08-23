@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { 
   Music, 
   Phone, 
@@ -35,9 +35,132 @@ import {
   Star,
   Image as ImageIcon,
   Menu,
-  X
+  X,
+  Play
 } from 'lucide-react';
 import { motion } from 'motion/react';
+
+declare global {
+  interface Window {
+    instgrm?: {
+      Embeds: {
+        process: () => void;
+      };
+    };
+  }
+}
+
+function InstagramEmbed({ permalink }: { permalink: string }) {
+  useEffect(() => {
+    const existingScript = document.querySelector<HTMLScriptElement>('script[src="https://www.instagram.com/embed.js"]');
+
+    if (window.instgrm) {
+      window.instgrm.Embeds.process();
+      return;
+    }
+
+    if (existingScript) {
+      existingScript.addEventListener('load', () => window.instgrm?.Embeds.process());
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = 'https://www.instagram.com/embed.js';
+    script.async = true;
+    script.onload = () => window.instgrm?.Embeds.process();
+    document.body.appendChild(script);
+  }, [permalink]);
+
+  return (
+    <div className="w-full max-w-[400px] min-h-[500px] bg-[#0a0e1a] rounded-2xl overflow-hidden mx-auto">
+      <blockquote
+        className="instagram-media"
+        data-instgrm-permalink={permalink}
+        data-instgrm-version="14"
+        style={{ background: '#0a0e1a', margin: 0, width: '100%' }}
+      />
+    </div>
+  );
+}
+
+const TESTIMONIAL_REELS = [
+  { permalink: 'https://www.instagram.com/reel/Dbbc8Ngq_0O/', label: 'Ver testimonio', image: '/assets/testimonios/Testimonio-1.png' },
+  { permalink: 'https://www.instagram.com/reel/DMGXlzURVHo/', label: 'Ver experiencia', image: '/assets/testimonios/Testimonio-2.png' },
+];
+
+function TestimonialsSection() {
+  const [openReel, setOpenReel] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!openReel) return;
+
+    document.body.style.overflow = 'hidden';
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpenReel(null);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [openReel]);
+
+  return (
+    <section className="py-32 px-6 bg-[#0a0e1a]">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold mb-4">Lo que dicen nuestros clientes</h2>
+          <p className="text-slate-400">Experiencias reales de quienes confiaron en Ismo Guate.</p>
+        </div>
+
+        <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+          {TESTIMONIAL_REELS.map((reel) => (
+            <button
+              key={reel.permalink}
+              type="button"
+              onClick={() => setOpenReel(reel.permalink)}
+              className="group relative w-full max-w-[240px] aspect-[3/4] rounded-2xl overflow-hidden bg-slate-900 border border-white/10 hover:border-blue-300/50 hover:scale-[1.03] transition-all cursor-pointer"
+            >
+              <img
+                src={reel.image}
+                alt={reel.label}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors" />
+              <div className="relative h-full flex flex-col items-center justify-center gap-4">
+                <span className="w-14 h-14 rounded-full bg-black/50 group-hover:bg-black/60 flex items-center justify-center transition-colors">
+                  <Play className="w-6 h-6 text-white fill-white ml-0.5" />
+                </span>
+                <span className="text-sm font-semibold text-white drop-shadow-md transition-colors">{reel.label}</span>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {openReel && (
+        <div
+          className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setOpenReel(null)}
+        >
+          <div className="relative max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <button
+              type="button"
+              onClick={() => setOpenReel(null)}
+              className="absolute -top-12 right-0 text-white hover:text-blue-300 transition-colors"
+              aria-label="Cerrar"
+            >
+              <X className="w-8 h-8" />
+            </button>
+            <InstagramEmbed permalink={openReel} />
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
 
 export default function App() {
   const [packageType, setPackageType] = useState<'sound' | 'creativity'>('sound');
@@ -196,8 +319,11 @@ export default function App() {
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 bg-black/40 backdrop-blur-xl border-b border-white/5">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <a href="#" className="flex items-center hover:opacity-80 transition-opacity">
+          <a href="#" className="flex flex-col justify-center hover:opacity-80 transition-opacity">
             <LogoGuate />
+            <span className="hidden sm:block text-[10px] font-semibold uppercase tracking-widest text-slate-400 mt-0.5">
+              Creamos ambientes, generamos emociones
+            </span>
           </a>
           
           {/* Desktop Navigation */}
@@ -832,6 +958,9 @@ export default function App() {
         </div>
       </section>
 
+      {/* TESTIMONIALS SECTION */}
+      <TestimonialsSection />
+
       {/* Lightbox Modal */}
       {selectedImage && (
         <div 
@@ -1068,16 +1197,16 @@ export default function App() {
       </footer>
 
       {/* Floating CTA */}
-      <a 
+      <a
         href={whatsappLink}
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-8 right-8 bg-[#25D366] hover:bg-[#128C7E] text-white p-4 rounded-full shadow-2xl z-50 transition-all hover:scale-110 flex items-center gap-2 group"
+        className="fixed bottom-8 right-8 bg-[#25D366] hover:bg-[#128C7E] text-white p-4 rounded-full shadow-2xl z-50 transition-all hover:scale-110 flex items-center gap-2"
       >
-        <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-500 font-bold whitespace-nowrap px-0 group-hover:px-2">
-          Cotiza tu evento ahora
+        <span className="hidden sm:inline font-bold whitespace-nowrap">
+          Cotiza aquí
         </span>
-        <WhatsAppIcon className="w-8 h-8" />
+        <WhatsAppIcon className="w-8 h-8 shrink-0" />
       </a>
     </div>
   );
