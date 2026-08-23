@@ -1191,7 +1191,7 @@ export default function App() {
           </div>
 
           <div className="pt-10 border-t border-white/5 text-slate-600 text-[10px] uppercase tracking-[0.3em]">
-            © {new Date().getFullYear()} Ismo Guate. Calidad y Creatividad en cada proyecto.
+            © {new Date().getFullYear()} ISMO GUATE. CREAMOS AMBIENTES, GENERAMOS EMOCIONES
           </div>
         </div>
       </footer>
