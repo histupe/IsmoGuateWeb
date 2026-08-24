@@ -40,6 +40,11 @@ import {
 } from 'lucide-react';
 import { motion } from 'motion/react';
 
+const fadeInUp = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0 }
+};
+
 declare global {
   interface Window {
     instgrm?: {
@@ -115,7 +120,14 @@ function TestimonialsSection() {
           <p className="text-slate-400">Experiencias reales de quienes confiaron en Ismo Guate.</p>
         </div>
 
-        <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeInUp}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="flex flex-col md:flex-row items-center justify-center gap-6"
+        >
           {TESTIMONIAL_REELS.map((reel) => (
             <button
               key={reel.permalink}
@@ -137,7 +149,7 @@ function TestimonialsSection() {
               </div>
             </button>
           ))}
-        </div>
+        </motion.div>
       </div>
 
       {openReel && (
@@ -238,7 +250,7 @@ export default function App() {
     { url: '/assets/gallery/foto7.svg', alt: 'Ismo Creativity 1', title: 'Creatividad' },
   ];
 
-  const GalleryCard = ({ img }: { img: { url: string; alt: string; title: string } }) => {
+  const GalleryCard = ({ img, index }: { img: { url: string; alt: string; title: string }; index: number }) => {
     const [isVisible, setIsVisible] = useState(true);
 
     if (!isVisible) {
@@ -247,6 +259,11 @@ export default function App() {
 
     return (
       <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeInUp}
+        transition={{ duration: 0.5, ease: "easeOut", delay: (index % 3) * 0.1 }}
         whileHover={{ scale: 1.02 }}
         onClick={() => setSelectedImage(img.url)}
         className="aspect-video bg-white/5 rounded-2xl border border-white/10 flex flex-col items-center justify-center text-slate-600 group hover:border-blue-300/30 transition-all cursor-pointer overflow-hidden relative"
@@ -263,24 +280,6 @@ export default function App() {
         </div>
       </motion.div>
     );
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1
-    }
   };
 
   return (
@@ -589,7 +588,8 @@ export default function App() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              variants={containerVariants}
+              variants={fadeInUp}
+              transition={{ duration: 0.5, ease: "easeOut" }}
             >
               <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">Audio e Iluminación <span className="text-blue-300">Profesional</span></h2>
               <p className="text-slate-300 text-xl leading-relaxed mb-10">
@@ -624,7 +624,14 @@ export default function App() {
               </a>
             </motion.div>
 
-            <div className="space-y-8">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInUp}
+              transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
+              className="space-y-8"
+            >
               <div className="relative">
                 <div className="absolute -inset-4 bg-blue-300/20 blur-2xl rounded-full -z-10" />
                 <img src={photoSound1} className="rounded-3xl shadow-2xl border border-white/10 w-full object-cover aspect-video" alt="Sound Setup" referrerPolicy="no-referrer" />
@@ -672,7 +679,7 @@ export default function App() {
                   <span className="bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">Equipos de calidad</span>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -687,7 +694,14 @@ export default function App() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div className="lg:order-2">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInUp}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="lg:order-2"
+            >
               <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">Personalización y <span className="text-green-500">Papelería Creativa</span></h2>
               <p className="text-slate-600 text-lg mb-8 leading-relaxed">
                 Creamos productos personalizados para eventos y marcas, desde una pieza hasta pedidos por volumen. 
@@ -732,13 +746,20 @@ export default function App() {
               >
                 Solicita tu catálogo <ShoppingBag className="w-6 h-6" />
               </a>
-            </div>
-            <div className="lg:order-1">
+            </motion.div>
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInUp}
+              transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
+              className="lg:order-1"
+            >
               <div className="relative">
                 <div className="absolute -inset-4 bg-orange-500/10 blur-2xl rounded-full -z-10" />
                 <img src={photoCreativity1} className="rounded-3xl shadow-xl border border-slate-200 w-full object-cover aspect-video" alt="Creativity Work" referrerPolicy="no-referrer" />
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -762,6 +783,11 @@ export default function App() {
             ].map((card, i) => (
               <motion.div
                 key={i}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={fadeInUp}
+                transition={{ duration: 0.5, ease: "easeOut", delay: (i % 3) * 0.1 }}
                 whileHover={{ y: -5 }}
                 className={`p-8 rounded-3xl bg-slate-950 border border-white/5 hover:border-${card.color === 'blue' ? 'blue-300' : card.color === 'orange' ? 'orange-500' : 'green-500'}/30 transition-all`}
               >
@@ -791,7 +817,15 @@ export default function App() {
               { step: "03", title: "Propuesta Ideal", desc: "Te recomendamos la mejor opción técnica o creativa.", color: "text-green-500" },
               { step: "04", title: "Entrega y Disfrute", desc: "Nosotros nos encargamos de que todo salga perfecto.", color: "text-blue-300" }
             ].map((item, i) => (
-              <div key={i} className="relative group">
+              <motion.div
+                key={i}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={fadeInUp}
+                transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.1 }}
+                className="relative group"
+              >
                 <div className={`text-5xl font-black ${item.color}/20 mb-6 group-hover:${item.color}/40 transition-colors`}>
                   {item.step}
                 </div>
@@ -799,7 +833,7 @@ export default function App() {
                   <h4 className="text-xl font-bold mb-4 text-white">{item.title}</h4>
                   <p className="text-slate-400 leading-relaxed">{item.desc}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -869,10 +903,13 @@ export default function App() {
                     color: 'blue'
                   }
                 ].map((pkg, i) => (
-                  <motion.div 
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    key={`sound-${i}`} 
+                  <motion.div
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    variants={fadeInUp}
+                    transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.1 }}
+                    key={`sound-${i}`}
                     className={`relative p-8 rounded-3xl bg-slate-950 border ${pkg.popular ? 'border-orange-500/50' : 'border-white/5'} flex flex-col`}
                   >
                     {pkg.popular && <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-orange-500 text-white text-[10px] font-bold uppercase tracking-widest px-4 py-1 rounded-full">Más Popular</span>}
@@ -914,10 +951,13 @@ export default function App() {
                     color: 'orange'
                   }
                 ].map((pkg, i) => (
-                  <motion.div 
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    key={`creativity-${i}`} 
+                  <motion.div
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    variants={fadeInUp}
+                    transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.1 }}
+                    key={`creativity-${i}`}
                     className={`relative p-8 rounded-3xl bg-slate-950 border ${pkg.popular ? 'border-green-500/50' : 'border-white/5'} flex flex-col`}
                   >
                     {pkg.popular && <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-green-600 text-white text-[10px] font-bold uppercase tracking-widest px-4 py-1 rounded-full">Más Cotizado</span>}
@@ -951,8 +991,8 @@ export default function App() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {galleryImages.map((img) => (
-              <GalleryCard key={img.url} img={img} />
+            {galleryImages.map((img, index) => (
+              <GalleryCard key={img.url} img={img} index={index} />
             ))}
           </div>
         </div>
@@ -995,7 +1035,14 @@ export default function App() {
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
             {/* Left Side: Info */}
-            <div className="space-y-8">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInUp}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="space-y-8"
+            >
               <div className="inline-block px-4 py-1.5 rounded-full bg-blue-300/10 border border-blue-300/20 text-blue-300 text-xs font-bold uppercase tracking-widest">
                 Contacto Directo
               </div>
@@ -1027,11 +1074,18 @@ export default function App() {
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Right Side: Form */}
-            <div className="glass bg-slate-950/95 p-8 md:p-12 rounded-[2.5rem] border-white/10 shadow-2xl">
-              <form 
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInUp}
+              transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
+              className="glass bg-slate-950/95 p-8 md:p-12 rounded-[2.5rem] border-white/10 shadow-2xl"
+            >
+              <form
                 onSubmit={(e) => {
                   e.preventDefault();
                   const formData = new FormData(e.currentTarget);
@@ -1143,7 +1197,7 @@ export default function App() {
                   Al enviar, se abrirá WhatsApp con tu información lista para enviar.
                 </p>
               </form>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -1197,17 +1251,20 @@ export default function App() {
       </footer>
 
       {/* Floating CTA */}
-      <a
+      <motion.a
         href={whatsappLink}
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-8 right-8 bg-[#25D366] hover:bg-[#128C7E] text-white p-4 rounded-full shadow-2xl z-50 transition-all hover:scale-110 flex items-center gap-2"
+        animate={{ scale: [1, 1.03, 1] }}
+        transition={{ duration: 2.75, repeat: Infinity, ease: "easeInOut" }}
+        whileHover={{ scale: 1.1 }}
+        className="fixed bottom-8 right-8 bg-[#25D366] hover:bg-[#128C7E] text-white p-4 rounded-full shadow-2xl z-50 transition-colors flex items-center gap-2"
       >
         <span className="hidden sm:inline font-bold whitespace-nowrap">
           Cotiza aquí
         </span>
         <WhatsAppIcon className="w-8 h-8 shrink-0" />
-      </a>
+      </motion.a>
     </div>
   );
 }
