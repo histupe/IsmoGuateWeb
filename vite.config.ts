@@ -50,13 +50,20 @@ function cotizarPreviewPages(): Plugin {
         html = setMeta(html, 'property', 'og:title', page.title);
         html = setMeta(html, 'property', 'og:description', page.description);
         html = setMeta(html, 'property', 'og:image', image);
+        // Tamaño y tipo de la imagen: WhatsApp los usa para mostrar la foto grande.
+        html = html.replace(
+          /(<meta\s+property="og:image"\s+content="[^"]*"\s*\/?>)/,
+          `$1\n    <meta property="og:image:secure_url" content="${image}" />\n    <meta property="og:image:type" content="image/jpeg" />\n    <meta property="og:image:width" content="1200" />\n    <meta property="og:image:height" content="630" />\n    <meta property="og:image:alt" content="${page.title}" />`,
+        );
         html = setMeta(html, 'property', 'og:url', url);
         html = setMeta(html, 'name', 'twitter:title', page.title);
         html = setMeta(html, 'name', 'twitter:description', page.description);
         html = setMeta(html, 'name', 'twitter:image', image);
-        const dir = path.join(outDir, page.route);
-        fs.mkdirSync(dir, {recursive: true});
-        fs.writeFileSync(path.join(dir, 'index.html'), html);
+        // Se guarda como cotizar/sound.html (no cotizar/sound/index.html): así Cloudflare Pages
+        // responde en /cotizar/sound directamente, sin redirigir a /cotizar/sound/.
+        const file = path.join(outDir, `${page.route}.html`);
+        fs.mkdirSync(path.dirname(file), {recursive: true});
+        fs.writeFileSync(file, html);
       }
     },
   };
