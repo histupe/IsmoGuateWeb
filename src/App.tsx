@@ -39,6 +39,7 @@ import {
   Play
 } from 'lucide-react';
 import { motion } from 'motion/react';
+import CotizadorWizard, { type CotizadorPreset, type Division } from './components/CotizadorWizard';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 24 },
@@ -178,12 +179,35 @@ export default function App() {
   const [packageType, setPackageType] = useState<'sound' | 'creativity'>('sound');
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  // Página enfocada: ismoguate.com.gt/cotizar (?sound, ?creativity, &src=wa)
+  // Rutas: /cotizar, /cotizar/sound y /cotizar/creativity (también acepta ?sound o ?creativity).
+  const cotizarPath = typeof window !== 'undefined' ? window.location.pathname.replace(/\/+$/, '') : '';
+  const isCotizarPage = cotizarPath === '/cotizar' || cotizarPath.startsWith('/cotizar/');
+  const [quotePreset, setQuotePreset] = useState<CotizadorPreset>(() => {
+    if (!isCotizarPage) return { division: null, n: 0 };
+    const params = new URLSearchParams(window.location.search);
+    const division: Division | null =
+      cotizarPath === '/cotizar/sound' || params.has('sound')
+        ? 'sound'
+        : cotizarPath === '/cotizar/creativity' || params.has('creativity')
+          ? 'creativity'
+          : null;
+    const canal = params.get('src') === 'wa' ? 'Enlace de WhatsApp' : 'Enlace del cotizador';
+    return { division, canal, n: 1 };
+  });
+  const [isChooserOpen, setIsChooserOpen] = useState(false);
+  // Abre el cotizador con la división (y el paquete) ya elegidos. El enlace #cotizar hace el scroll.
+  useEffect(() => {
+    if (isCotizarPage) document.title = 'Cotiza tu evento o pedido | Ismo Guate';
+  }, [isCotizarPage]);
+
+  const startQuote = (division: Division, paquete?: string) =>
+    setQuotePreset((prev) => ({ division, paquete, n: prev.n + 1 }));
   const whatsappNumber = "50245644861";
   const creativityWhatsappNumber = "50239146137";
-  const whatsappLink = `https://wa.me/${whatsappNumber}?text=Hola%20Ismo%20Sound%2C%20estoy%20por%20realizar%20un%20evento`;
+  const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent('¡Hola Ismo Sound! Vengo de la página web y estoy por realizar un evento.')}`;
+  const creativityChatLink = `https://wa.me/${creativityWhatsappNumber}?text=${encodeURIComponent('¡Hola Ismo Creativity! Vengo de la página web y me interesan productos personalizados.')}`;
   const catalogLink = `https://wa.me/${creativityWhatsappNumber}?text=¡Hola%20Ismo%20Guate!%20¿Me%20envían%20el%20catálogo%20de%20Ismo%20Creativity?%20Vengo%20de%20la%20web`;
-  const quoteLink = `https://wa.me/${whatsappNumber}?text=Hola!%20Me%20gustaría%20cotizar%20un%20evento%20con%20Ismo%20Sound.`;
-  const creativityQuoteLink = `https://wa.me/${creativityWhatsappNumber}?text=Hola!%20Me%20gustaría%20solicitar%20una%20cotización%20para%20Ismo%20Creativity.`;
 
   // Logos from user input (Text-based for now as requested)
   const LogoGuate = () => (
@@ -200,17 +224,11 @@ export default function App() {
     </span>
   );
 
-  const LogoCreativity = ({ className = "text-3xl", dark = false }: { className?: string, dark?: boolean }) => (
-    <span className={`${className} font-sans font-bold tracking-tight`}>
-      <span className="text-orange-500">ISMO</span>
-      <span className="text-green-500" translate="no">CREATIVITY</span>
-    </span>
-  );
-
   const divisionLogos = {
     sound: '/assets/logos/ismo_sound.svg',
-    creativity: '/assets/logos/ismo_creativity.svg',
-    creativityWhite: '/assets/logos/ismo_creativity_white.svg'
+    creativity: '/assets/logos/creativity/creativity-principal.png',
+    creativityOnBlue: '/assets/logos/creativity/creativity-sobre-azul.png',
+    creativityWhite: '/assets/logos/creativity/creativity-blanco.png'
   };
 
   const DivisionLogo = ({ src, alt, className = "w-20 h-20 object-contain" }: { src: string, alt: string, className?: string }) => (
@@ -282,6 +300,35 @@ export default function App() {
     );
   };
 
+  if (isCotizarPage) {
+    return (
+      <div className="min-h-screen bg-[#020617] text-white font-sans selection:bg-orange-500/30">
+        <header className="max-w-3xl mx-auto px-6 pt-8 pb-4 flex items-center justify-between gap-4">
+          <a href="/" className="flex flex-col hover:opacity-80 transition-opacity">
+            <LogoGuate />
+            <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mt-0.5">
+              Creamos ambientes, generamos emociones
+            </span>
+          </a>
+          <a href="/" className="shrink-0 whitespace-nowrap text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-white transition-colors">
+            Ver página
+          </a>
+        </header>
+        <main className="max-w-3xl mx-auto px-6 pb-16">
+          <h1 className="text-3xl md:text-4xl font-black tracking-tight mt-4 mb-2">Cotiza en 1 minuto</h1>
+          <p className="text-slate-400 mb-8">Responde unas preguntas rápidas y te enviamos una propuesta a tu medida por WhatsApp.</p>
+          <div className="bg-slate-950/95 p-6 md:p-10 rounded-[2rem] border border-white/10 shadow-2xl">
+            <CotizadorWizard soundNumber={whatsappNumber} creativityNumber={creativityWhatsappNumber} preset={quotePreset} />
+          </div>
+          <p className="text-center text-sm text-slate-500 mt-8">
+            ¿Prefieres hablar con nosotros?{' '}
+            <a href="tel:+50245644861" className="text-slate-300 hover:text-white font-semibold">+502 4564 4861</a>
+          </p>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-black text-white font-sans selection:bg-orange-500/30 relative">
       {/* Background Lighting Effect */}
@@ -328,9 +375,9 @@ export default function App() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
             <a href="#sound" className="hover:text-blue-300 transition-colors">Ismo <span translate="no">Sound</span></a>
-            <a href="#creativity" className="hover:text-orange-400 transition-colors">Ismo <span translate="no">Creativity</span></a>
+            <a href="#creativity" className="hover:text-coral transition-colors">Ismo <span translate="no">Creativity</span></a>
             <a href="#packages" className="hover:text-white transition-colors">Paquetes</a>
-            <a href="#contact" className="hover:text-white transition-colors">Contacto</a>
+            <a href="#cotizar" className="hover:text-white transition-colors">Cotizar</a>
             
             <div className="flex items-center gap-4 ml-2 border-l border-white/10 pl-6">
               <a href="https://www.facebook.com/profile.php?id=61572393180709" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-blue-300 transition-all hover:scale-110">
@@ -383,7 +430,7 @@ export default function App() {
             <a 
               href="#creativity" 
               onClick={() => setIsMenuOpen(false)}
-              className="text-lg font-bold text-slate-300 hover:text-orange-400 transition-colors"
+              className="text-lg font-bold text-slate-300 hover:text-coral transition-colors"
             >
               Ismo <span translate="no">Creativity</span>
             </a>
@@ -395,11 +442,11 @@ export default function App() {
               Paquetes
             </a>
             <a 
-              href="#contact" 
+              href="#cotizar" 
               onClick={() => setIsMenuOpen(false)}
               className="text-lg font-bold text-slate-300 hover:text-white transition-colors"
             >
-              Contacto
+              Cotizar
             </a>
             
             <div className="pt-6 border-t border-white/10 flex items-center gap-8">
@@ -469,7 +516,7 @@ export default function App() {
               </div>
               <div className="hidden md:block w-px h-4 bg-white/10"></div>
               <div className="flex items-center gap-3">
-                <div className="w-1.5 h-1.5 rounded-full bg-orange-500"></div>
+                <div className="w-1.5 h-1.5 rounded-full bg-coral"></div>
                 <p className="text-lg md:text-xl text-white font-sans font-bold tracking-wide">
                   Ismo <span translate="no">Creativity</span> <span className="text-slate-500 font-light mx-1 font-sans">|</span> <span className="text-slate-300 font-medium font-sans">Personalizados y papelería creativa</span>
                 </p>
@@ -505,12 +552,11 @@ export default function App() {
             >
               <div className="flex flex-wrap justify-center gap-6">
                 <a 
-                  href={whatsappLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group relative bg-[#25D366] hover:bg-[#128C7E] text-white px-10 py-5 rounded-2xl font-black text-xl transition-all shadow-2xl shadow-green-500/20 flex items-center gap-3 hover:-translate-y-1"
+                  href="#cotizar"
+                  onClick={() => startQuote('sound')}
+                  className="group relative bg-orange-500 hover:bg-orange-600 text-white px-10 py-5 rounded-2xl font-black text-xl transition-all shadow-2xl shadow-orange-500/20 flex items-center gap-3 hover:-translate-y-1"
                 >
-                  Cotizar por WhatsApp <MessageCircle className="w-6 h-6 group-hover:rotate-12 transition-transform" />
+                  Cotizar mi evento <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
                 </a>
                 <a 
                   href="#sound"
@@ -519,6 +565,14 @@ export default function App() {
                   Ver Servicios
                 </a>
               </div>
+              <a
+                href={whatsappLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-sm font-semibold text-slate-400 hover:text-[#25D366] transition-colors"
+              >
+                <WhatsAppIcon className="w-4 h-4" /> o escríbenos directo por WhatsApp
+              </a>
             </motion.div>
           </div>
 
@@ -543,29 +597,28 @@ export default function App() {
               </div>
             </motion.a>
 
-            {/* ISMO CREATIVITY CARD */}
-            <motion.a
-              href="#creativity"
+            {/* ISMO CREATIVITY CARD (colores del manual de Creativity) */}
+            <motion.div
               whileHover={{ y: -10 }}
-              className="group relative p-1 rounded-[2.5rem] bg-gradient-to-b from-orange-500/20 to-transparent border border-white/10 overflow-hidden"
+              className="group relative rounded-[2.5rem] bg-creativity-blue border border-white/10 overflow-hidden"
             >
-              <div className="absolute inset-0 bg-orange-600/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="relative p-10 bg-[#020617]/40 backdrop-blur-2xl rounded-[2.4rem] h-full flex flex-col items-center text-center">
-                <div className="w-16 h-16 rounded-2xl bg-orange-500/10 flex items-center justify-center text-orange-400 mb-6 group-hover:scale-110 transition-transform">
-                  <Palette className="w-8 h-8" />
-                </div>
-                <h3 className="text-2xl font-black mb-2"><LogoCreativity /></h3>
-                <p className="text-slate-400 text-sm mb-6">Personalización + Detalles + Sublimación</p>
-                <a 
-                  href={catalogLink} 
-                  target="_blank" 
+              <div className="relative p-10 h-full flex flex-col items-center text-center">
+                <img
+                  src={divisionLogos.creativityOnBlue}
+                  alt="Ismo Creativity"
+                  className="h-20 w-auto object-contain mb-6 group-hover:scale-105 transition-transform"
+                />
+                <p className="text-mint text-sm mb-6">Personalización + Detalles + Sublimación</p>
+                <a
+                  href={catalogLink}
+                  target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-orange-400 font-bold text-xs uppercase tracking-widest cursor-pointer"
+                  className="inline-flex items-center gap-2 bg-coral text-creativity-blue font-bold text-xs uppercase tracking-widest px-5 py-2.5 rounded-full hover:brightness-105 transition-all"
                 >
-                  Ver Catálogo <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  Ver catálogo <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </a>
               </div>
-            </motion.a>
+            </motion.div>
           </div>
 
         </div>
@@ -619,8 +672,8 @@ export default function App() {
                 </ul>
               </div>
 
-              <a href="#contact" className="inline-flex items-center gap-3 bg-blue-300 hover:bg-blue-400 text-slate-900 px-10 py-5 rounded-2xl font-black text-lg transition-all shadow-xl shadow-blue-300/30 hover:-translate-y-1">
-                Cotiza tu evento ahora <WhatsAppIcon className="w-6 h-6" />
+              <a href="#cotizar" onClick={() => startQuote('sound')} className="inline-flex items-center gap-3 bg-blue-300 hover:bg-blue-400 text-slate-900 px-10 py-5 rounded-2xl font-black text-lg transition-all shadow-xl shadow-blue-300/30 hover:-translate-y-1">
+                Cotizar mi evento <ArrowRight className="w-6 h-6" />
               </a>
             </motion.div>
 
@@ -685,12 +738,11 @@ export default function App() {
       </section>
 
       {/* ISMO CREATIVITY SECTION */}
-      <section id="creativity" className="py-32 px-6 border-t border-white/5 bg-white text-slate-900">
+      <section id="creativity" className="py-32 px-6 border-t border-white/5 bg-white text-black">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center gap-6 mb-16">
-            <DivisionLogo src={divisionLogos.creativity} alt="Logo Ismo Creativity" />
-            <LogoCreativity className="text-4xl" dark />
-            <div className="h-px flex-grow bg-slate-200" />
+            <DivisionLogo src={divisionLogos.creativity} alt="Ismo Creativity" className="h-20 w-auto object-contain" />
+            <div className="h-px flex-grow bg-mint" />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -702,36 +754,36 @@ export default function App() {
               transition={{ duration: 0.5, ease: "easeOut" }}
               className="lg:order-2"
             >
-              <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">Personalización y <span className="text-green-500">Papelería Creativa</span></h2>
-              <p className="text-slate-600 text-lg mb-8 leading-relaxed">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight leading-[1.1] text-creativity-blue">Personalización y <span className="underline decoration-coral decoration-[6px] underline-offset-8">papelería creativa</span></h2>
+              <p className="text-black text-lg mb-8 leading-relaxed">
                 Creamos productos personalizados para eventos y marcas, desde una pieza hasta pedidos por volumen. 
                 Calidad que se nota y diseños que impactan.
               </p>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
                 {[
-                  { icon: <Printer className="text-orange-500" />, title: 'Sublimación', desc: 'Tazas, termos, gorras y más.' },
-                  { icon: <Layers className="text-orange-500" />, title: 'DTF', desc: 'Playeras y textiles.' },
-                  { icon: <Palette className="text-orange-500" />, title: 'Papelería', desc: 'Stickers, invitaciones, planificadores.' },
-                  { icon: <Sparkles className="text-orange-500" />, title: 'Diseño', desc: 'Arte personalizado.' }
+                  { icon: <Printer className="text-creativity-blue" />, title: 'Sublimación', desc: 'Tazas, termos, gorras y más.' },
+                  { icon: <Layers className="text-creativity-blue" />, title: 'DTF', desc: 'Playeras y textiles.' },
+                  { icon: <Palette className="text-creativity-blue" />, title: 'Papelería', desc: 'Stickers, invitaciones, planificadores.' },
+                  { icon: <Sparkles className="text-creativity-blue" />, title: 'Diseño', desc: 'Arte personalizado.' }
                 ].map((item, i) => (
-                  <div key={i} className="flex gap-3 p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                  <div key={i} className="flex gap-3 p-4 rounded-2xl bg-mint-soft border border-mint">
                     <div className="mt-1">{item.icon}</div>
                     <div>
-                      <h4 className="font-bold text-sm">{item.title}</h4>
-                      <p className="text-xs text-slate-500">{item.desc}</p>
+                      <h4 className="font-bold text-sm text-creativity-blue">{item.title}</h4>
+                      <p className="text-xs text-black">{item.desc}</p>
                     </div>
                   </div>
                 ))}
               </div>
 
               <div className="mb-10">
-                <h4 className="font-bold mb-4 flex items-center gap-2 text-slate-700">
-                  <CheckCircle2 className="w-5 h-5 text-green-600" /> Ideal para:
+                <h4 className="font-bold mb-4 flex items-center gap-2 text-creativity-blue">
+                  <CheckCircle2 className="w-5 h-5 text-creativity-blue" /> Ideal para:
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {['Eventos Sociales', 'Iglesias', 'Emprendimientos', 'Marcas Corporativas'].map((tag, i) => (
-                    <span key={i} className="bg-slate-100 text-slate-600 px-4 py-1.5 rounded-full text-sm font-medium">
+                    <span key={i} className="bg-mint text-creativity-blue px-4 py-1.5 rounded-full text-sm font-medium">
                       {tag}
                     </span>
                   ))}
@@ -742,7 +794,7 @@ export default function App() {
                 href={catalogLink} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 bg-orange-500 hover:bg-orange-600 text-white px-10 py-5 rounded-2xl font-black text-lg transition-all shadow-xl shadow-orange-500/20 hover:-translate-y-1"
+                className="inline-flex items-center gap-3 bg-creativity-blue hover:brightness-125 text-white px-10 py-5 rounded-full font-black text-lg transition-all hover:-translate-y-1"
               >
                 Solicita tu catálogo <ShoppingBag className="w-6 h-6" />
               </a>
@@ -756,8 +808,8 @@ export default function App() {
               className="lg:order-1"
             >
               <div className="relative">
-                <div className="absolute -inset-4 bg-orange-500/10 blur-2xl rounded-full -z-10" />
-                <img src={photoCreativity1} className="rounded-3xl shadow-xl border border-slate-200 w-full object-cover aspect-video" alt="Creativity Work" referrerPolicy="no-referrer" />
+                <div className="absolute -right-4 -bottom-4 w-full h-full bg-coral rounded-3xl -z-10" />
+                <img src={photoCreativity1} className="rounded-3xl shadow-xl border-4 border-white w-full object-cover aspect-video" alt="Creativity Work" referrerPolicy="no-referrer" />
               </div>
             </motion.div>
           </div>
@@ -858,7 +910,7 @@ export default function App() {
                 </button>
                 <button 
                   onClick={() => setPackageType('creativity')}
-                  className={`px-8 py-3 rounded-xl font-bold text-sm transition-all flex items-center gap-2 ${packageType === 'creativity' ? 'bg-orange-500 text-white shadow-lg' : 'text-slate-400 hover:text-white'}`}
+                  className={`px-8 py-3 rounded-xl font-bold text-sm transition-all flex items-center gap-2 ${packageType === 'creativity' ? 'bg-coral text-creativity-blue shadow-lg' : 'text-slate-400 hover:text-white'}`}
                 >
                   <Palette className="w-4 h-4" /> Ismo <span translate="no">Creativity</span>
                 </button>
@@ -871,10 +923,10 @@ export default function App() {
             <motion.div 
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mb-8 p-8 rounded-3xl bg-gradient-to-r from-orange-500/10 via-orange-500/5 to-transparent border border-orange-500/20 text-center"
+              className="mb-8 p-8 rounded-3xl bg-creativity-blue border border-coral/40 text-center"
             >
               <p className="text-xl md:text-2xl font-bold text-white">
-                "Elije el paquete ideal para ti y deja que nosotros hagamos la magia."
+                "Elige el paquete ideal para ti y deja que nosotros hagamos la magia."
               </p>
             </motion.div>
           )}
@@ -922,8 +974,8 @@ export default function App() {
                         </li>
                       ))}
                     </ul>
-                    <a href="#contact" className={`w-full py-4 rounded-xl font-black text-center transition-all flex items-center justify-center gap-2 ${pkg.color === 'orange' ? 'bg-orange-500 hover:bg-orange-600' : 'bg-blue-300 hover:bg-blue-400'} text-white shadow-lg`}>
-                      Consulta disponibilidad <MessageCircle className="w-5 h-5" />
+                    <a href="#cotizar" onClick={() => startQuote('sound', pkg.title)} className={`w-full py-4 rounded-xl font-black text-center transition-all flex items-center justify-center gap-2 ${pkg.color === 'orange' ? 'bg-orange-500 hover:bg-orange-600' : 'bg-blue-300 hover:bg-blue-400'} text-white shadow-lg`}>
+                      Cotizar este paquete <ArrowRight className="w-5 h-5" />
                     </a>
                   </motion.div>
                 ))}
@@ -940,7 +992,7 @@ export default function App() {
                   { 
                     title: 'Pack a tu medida', 
                     cap: 'Creamos lo que imaginas', 
-                    features: ['¿Tienes una idea especial? ', 'La imaginacion no tiene límites', 'Pensado para momentos especiales'],
+                    features: ['¿Tienes una idea especial? ', 'La imaginación no tiene límites', 'Pensado para momentos especiales'],
                     color: 'green',
                     popular: true
                   },
@@ -958,20 +1010,20 @@ export default function App() {
                     variants={fadeInUp}
                     transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.1 }}
                     key={`creativity-${i}`}
-                    className={`relative p-8 rounded-3xl bg-slate-950 border ${pkg.popular ? 'border-green-500/50' : 'border-white/5'} flex flex-col`}
+                    className={`relative p-8 rounded-3xl bg-creativity-blue border ${pkg.popular ? 'border-coral' : 'border-white/10'} flex flex-col`}
                   >
-                    {pkg.popular && <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-green-600 text-white text-[10px] font-bold uppercase tracking-widest px-4 py-1 rounded-full">Más Cotizado</span>}
+                    {pkg.popular && <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-coral text-creativity-blue text-[10px] font-bold uppercase tracking-widest px-4 py-1 rounded-full">Más cotizado</span>}
                     <h4 className="text-2xl font-bold mb-2">{pkg.title}</h4>
-                    <p className="text-slate-500 text-sm mb-6">{pkg.cap}</p>
+                    <p className="text-mint text-sm mb-6">{pkg.cap}</p>
                     <ul className="space-y-4 mb-10 flex-grow">
                       {pkg.features.map((f, j) => (
-                        <li key={j} className="flex items-start gap-3 text-sm text-slate-400">
-                          <CheckCircle2 className={`w-4 h-4 mt-0.5 ${pkg.color === 'orange' ? 'text-orange-500' : 'text-green-500'}`} /> {f}
+                        <li key={j} className="flex items-start gap-3 text-sm text-white">
+                          <CheckCircle2 className="w-4 h-4 mt-0.5 text-coral" /> {f}
                         </li>
                       ))}
                     </ul>
-                    <a href={creativityQuoteLink} className={`w-full py-4 rounded-xl font-black text-center transition-all flex items-center justify-center gap-2 ${pkg.color === 'orange' ? 'bg-orange-500 hover:bg-orange-600' : 'bg-green-600 hover:bg-green-700'} text-white shadow-lg`}>
-                      Solicita cotización <MessageCircle className="w-5 h-5" />
+                    <a href="#cotizar" onClick={() => startQuote('creativity', pkg.title)} className="w-full py-4 rounded-full font-black text-center transition-all flex items-center justify-center gap-2 bg-coral text-creativity-blue hover:brightness-105">
+                      Cotizar este paquete <ArrowRight className="w-5 h-5" />
                     </a>
                   </motion.div>
                 ))}
@@ -1029,7 +1081,9 @@ export default function App() {
       )}
 
       {/* CONTACT FORM SECTION */}
-      <section id="contact" className="py-32 px-6 bg-slate-900 relative overflow-hidden">
+      <section id="cotizar" className="py-32 px-6 bg-slate-900 relative overflow-hidden">
+        {/* Ancla antigua: los enlaces viejos a #contact siguen funcionando */}
+        <span id="contact" className="absolute top-0" aria-hidden="true" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(59,130,246,0.05),transparent_50%)]" />
         
         <div className="max-w-7xl mx-auto relative z-10">
@@ -1085,118 +1139,7 @@ export default function App() {
               transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
               className="glass bg-slate-950/95 p-8 md:p-12 rounded-[2.5rem] border-white/10 shadow-2xl"
             >
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  const formData = new FormData(e.currentTarget);
-                  const data = Object.fromEntries(formData.entries());
-                  
-                  // Construct WhatsApp message
-                  const message = `Hola Ismo Guate! Me gustaría solicitar una cotización:%0A%0A` +
-                    `*Interés:* ${data.interest}%0A` +
-                    `*Nombre:* ${data.name}%0A` +
-                    `*Evento/Proyecto:* ${data.event_type}%0A` +
-                    `*Fecha:* ${data.date}%0A` +
-                    `*Cantidad/Personas:* ${data.people}%0A` +
-                    `*Mensaje:* ${data.message}`;
-                  
-                  const destinationNumber = data.interest === 'Ismo Creativity (Personalizados)' ? creativityWhatsappNumber : whatsappNumber;
-                  window.open(`https://wa.me/${destinationNumber}?text=${message}`, '_blank');
-                  e.currentTarget.reset();
-                }}
-                className="space-y-6"
-              >
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">División de Interés</label>
-                  <select 
-                    required
-                    name="interest"
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-orange-500/50 transition-all text-white appearance-none"
-                  >
-                    <option translate="no" className="bg-slate-900" value="Ismo Sound (Eventos)">Ismo Sound (Eventos)</option>
-                    <option translate="no" className="bg-slate-900" value="Ismo Creativity (Personalizados)">Ismo Creativity (Personalizados)</option>
-                    <option className="bg-slate-900" value="Ambas Divisiones">Ambas Divisiones</option>
-                  </select>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Nombre Completo</label>
-                    <input 
-                      required
-                      name="name"
-                      type="text" 
-                      placeholder="Ej. Juan Pérez"
-                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-orange-500/50 transition-all text-white placeholder:text-slate-600"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Tipo de Evento / Proyecto</label>
-                    <select 
-                      name="event_type"
-                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-orange-500/50 transition-all text-white appearance-none"
-                    >
-                      <option className="bg-slate-900" value="Boda">Boda</option>                      
-                      <option className="bg-slate-900" value="Evento Corporativo">Evento Corporativo</option>
-                      <option className="bg-slate-900" value="Evento Social">Evento Social</option>
-                      <option className="bg-slate-900" value="Personalizados / Regalos">Personalizados / Regalos</option>
-                      <option className="bg-slate-900" value="Otro">Otro</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Fecha Estimada</label>
-                    <div className="relative">
-                      <Calendar className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-                      <input 
-                        required
-                        name="date"
-                        type="date" 
-                        className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-5 py-4 focus:outline-none focus:border-orange-500/50 transition-all text-white"
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Cantidad / Personas</label>
-                    <div className="relative">
-                      <Users className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-                      <input 
-                        required
-                        name="people"
-                        type="text" 
-                        placeholder="Ej. 150 personas o 50 tazas"
-                        className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-5 py-4 focus:outline-none focus:border-orange-500/50 transition-all text-white placeholder:text-slate-600"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Detalles Adicionales</label>
-                  <div className="relative">
-                    <MessageSquare className="absolute left-5 top-5 w-4 h-4 text-slate-500" />
-                    <textarea 
-                      name="message"
-                      rows={4}
-                      placeholder="Cuéntanos más sobre lo que necesitas..."
-                      className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-5 py-4 focus:outline-none focus:border-orange-500/50 transition-all text-white placeholder:text-slate-600 resize-none"
-                    ></textarea>
-                  </div>
-                </div>
-
-                <button 
-                  type="submit"
-                  className="w-full bg-orange-500 hover:bg-orange-600 text-white py-5 rounded-2xl font-black text-lg transition-all shadow-xl shadow-orange-500/20 flex items-center justify-center gap-3 group"
-                >
-                  Enviar Solicitud <Send className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                </button>
-                
-                <p className="text-[10px] text-center text-slate-500 uppercase tracking-widest">
-                  Al enviar, se abrirá WhatsApp con tu información lista para enviar.
-                </p>
-              </form>
+              <CotizadorWizard soundNumber={whatsappNumber} creativityNumber={creativityWhatsappNumber} preset={quotePreset} />
             </motion.div>
           </div>
         </div>
@@ -1220,11 +1163,11 @@ export default function App() {
               <a href="mailto:info@ismoguate.com.gt" className="block text-sm text-slate-400 hover:text-slate-200 transition-colors">info@ismoguate.com.gt</a>
               <div className="mt-4 flex items-center justify-center gap-3 opacity-80">
                 <img src={divisionLogos.sound} alt="Ismo Sound" className="w-20 h-20 object-contain" />
-                <img src={divisionLogos.creativityWhite} alt="Ismo Creativity" className="w-20 h-20 object-contain" />
+                <img src={divisionLogos.creativityWhite} alt="Ismo Creativity" className="h-12 w-auto object-contain" />
               </div>
-              <a href="#contact" className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#128C7E] px-6 py-3 rounded-full text-white font-black transition-all shadow-lg shadow-green-500/20">
-                Consulta disponibilidad <WhatsAppIcon className="w-4 h-4" />
-              </a>
+              <button type="button" onClick={() => setIsChooserOpen(true)} className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#128C7E] px-6 py-3 rounded-full text-white font-black transition-all shadow-lg shadow-green-500/20">
+                Escríbenos <WhatsAppIcon className="w-4 h-4" />
+              </button>
             </div>
             <div className="space-y-4">
               <h4 className="text-white font-bold uppercase tracking-widest text-xs">Horario</h4>
@@ -1250,21 +1193,65 @@ export default function App() {
         </div>
       </footer>
 
-      {/* Floating CTA */}
-      <motion.a
-        href={whatsappLink}
-        target="_blank"
-        rel="noopener noreferrer"
-        animate={{ scale: [1, 1.03, 1] }}
-        transition={{ duration: 2.75, repeat: Infinity, ease: "easeInOut" }}
-        whileHover={{ scale: 1.1 }}
-        className="fixed bottom-8 right-8 bg-[#25D366] hover:bg-[#128C7E] text-white p-4 rounded-full shadow-2xl z-50 transition-colors flex items-center gap-2"
-      >
-        <span className="hidden sm:inline font-bold whitespace-nowrap">
-          Cotiza aquí
-        </span>
-        <WhatsAppIcon className="w-8 h-8 shrink-0" />
-      </motion.a>
+      {/* Floating CTA: pregunta qué quiere cotizar y abre la línea correcta */}
+      <div className="fixed bottom-8 right-8 z-50 flex flex-col items-end gap-3">
+        {isChooserOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            role="dialog"
+            aria-label="¿Qué quieres cotizar?"
+            className="w-72 rounded-3xl bg-slate-950 border border-white/10 shadow-2xl p-5 space-y-3"
+          >
+            <div className="flex items-center justify-between">
+              <p className="font-bold text-white">¿Qué quieres cotizar?</p>
+              <button type="button" onClick={() => setIsChooserOpen(false)} aria-label="Cerrar" className="text-slate-400 hover:text-white">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <a
+              href={whatsappLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setIsChooserOpen(false)}
+              className="flex items-center gap-3 p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-blue-300/60 transition-all"
+            >
+              <Music className="w-5 h-5 text-blue-300 shrink-0" />
+              <span>
+                <span className="block text-sm font-bold text-white">Sonido para un evento</span>
+                <span className="block text-xs text-slate-400">Ismo <span translate="no">Sound</span></span>
+              </span>
+            </a>
+            <a
+              href={creativityChatLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setIsChooserOpen(false)}
+              className="flex items-center gap-3 p-4 rounded-2xl bg-creativity-blue border border-white/10 hover:border-coral transition-all"
+            >
+              <Palette className="w-5 h-5 text-coral shrink-0" />
+              <span>
+                <span className="block text-sm font-bold text-white">Productos personalizados</span>
+                <span className="block text-xs text-mint">Ismo <span translate="no">Creativity</span></span>
+              </span>
+            </a>
+          </motion.div>
+        )}
+        <motion.button
+          type="button"
+          onClick={() => setIsChooserOpen((open) => !open)}
+          aria-expanded={isChooserOpen}
+          animate={{ scale: [1, 1.03, 1] }}
+          transition={{ duration: 2.75, repeat: Infinity, ease: "easeInOut" }}
+          whileHover={{ scale: 1.1 }}
+          className="bg-[#25D366] hover:bg-[#128C7E] text-white p-4 rounded-full shadow-2xl transition-colors flex items-center gap-2"
+        >
+          <span className="hidden sm:inline font-bold whitespace-nowrap">
+            Escríbenos
+          </span>
+          <WhatsAppIcon className="w-8 h-8 shrink-0" />
+        </motion.button>
+      </div>
     </div>
   );
 }

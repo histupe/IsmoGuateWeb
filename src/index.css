@@ -45,6 +45,12 @@
   --color-brand-orange: #f9680e;
   --color-brand-blue: #04176b;
   --color-brand-green: #017309;
+
+  /* Ismo Creativity (manual de marca v1.1) */
+  --color-creativity-blue: #04176b;
+  --color-mint: #b8e0d2;
+  --color-mint-soft: #eaf6f1;
+  --color-coral: #fea5a4;
   
   /* Overriding default colors to match brand exactly */
   --color-orange-500: var(--color-brand-orange);
